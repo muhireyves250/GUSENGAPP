@@ -113,7 +113,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
                 )
               : isBroadcast
                   ? Image.asset(
-                      isActive ? 'assets/icons/broardcast_icon_hover.png' : 'assets/icons/broardcast_icon.png',
+                      isActive ? 'assets/icons/broadcast_icon_hover.png' : 'assets/icons/broadcast_icon.png',
                       width: 70 * scale,
                       height: 70 * scale,
                       fit: BoxFit.contain,

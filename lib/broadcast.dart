@@ -59,13 +59,13 @@ class BroadcastPage extends StatelessWidget {
                     ),
                   ),
                   
-                  // Fixed "Top broardcasts" text
+                  // Fixed "Top broadcasts" text
                   Positioned(
                     left: 36 * scale,
                     top: 50 * scale,
                     right: 36 * scale,
                     child: Text(
-                      'Top broardcasts',
+                      'Top broadcasts',
                       style: GoogleFonts.abhayaLibre(
                         fontSize: 22 * scale,
                         fontWeight: FontWeight.w800,
@@ -84,7 +84,7 @@ class BroadcastPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // "Top broardcasts" section
+                          // "Top broadcasts" section
                           Padding(
                             padding: EdgeInsets.only(
                               left: 36 * scale,

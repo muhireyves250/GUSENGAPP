@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'navigation_bar.dart';
@@ -186,7 +187,7 @@ class HomePage extends StatelessWidget {
                       SizedBox(width: 29 * scale),
                       Expanded(
                         child: Text(
-                          'Search Broardcasts.....',
+                          'Search Broadcasts.....',
                           style: GoogleFonts.abhayaLibre(
                             fontSize: 15 * scale,
                             fontWeight: FontWeight.w800,
@@ -213,14 +214,14 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               
-              // "New broardcasts" text (X: 58, Y: 250)
+              // "New broadcasts" text (X: 58, Y: 250)
               Positioned(
                 left: 58 * scale,
                 top: 255 * scale,
                 child: SizedBox(
                   width: (screenWidth - 58 * scale),
                   child: Text(
-                    'New broardcasts',
+                    'New broadcasts',
                     style: GoogleFonts.abhayaLibre(
                       fontSize: 25 * scale,
                       fontWeight: FontWeight.w800,
@@ -352,7 +353,7 @@ class HomePage extends StatelessWidget {
                                           ),
                                           SizedBox(width: 4 * scale),
                                           Text(
-                                            '28 0ctober 2025',
+                                            '28 October 2025',
                                             style: GoogleFonts.manrope(
                                               fontSize: 13 * scale,
                                               fontWeight: FontWeight.normal,
@@ -430,7 +431,7 @@ class HomePage extends StatelessWidget {
                           itemWidth: videoSectionWidth,
                           thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
                           title: 'Imana ni nyembabazi ',
-                          date: '28 0ctober 2025',
+                          date: '28 October 2025',
                           time: '10:00',
                           dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
                           playUrl: 'https://www.figma.com/api/mcp/asset/2e9b4857-7ba7-4ba4-84ff-de5c0c37307e',
@@ -673,30 +674,63 @@ class HomePage extends StatelessWidget {
 
 }
 
-class StatusBar extends StatelessWidget {
+class StatusBar extends StatefulWidget {
   final double scale;
   
   const StatusBar({super.key, required this.scale});
 
   @override
+  State<StatusBar> createState() => _StatusBarState();
+}
+
+class _StatusBarState extends State<StatusBar> {
+  late String _currentTime;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTime = _formatTime(DateTime.now());
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          _currentTime = _formatTime(DateTime.now());
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  String _formatTime(DateTime time) {
+    String hour = time.hour.toString().padLeft(1, '0');
+    String minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: 59 * scale,
-      padding: EdgeInsets.symmetric(horizontal: 10 * scale),
+      height: 59 * widget.scale,
+      padding: EdgeInsets.symmetric(horizontal: 10 * widget.scale),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Left side - Time
           Container(
-            width: 54 * scale,
+            width: 54 * widget.scale,
             alignment: Alignment.center,
             child: Text(
-              '9:41',
+              _currentTime,
               style: TextStyle(
-                fontSize: 16 * scale,
+                fontSize: 16 * widget.scale,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
-                letterSpacing: -0.32 * scale,
+                color: Colors.white,
+                letterSpacing: -0.32 * widget.scale,
                 fontFamily: 'SF Pro Text',
               ),
             ),
@@ -704,11 +738,11 @@ class StatusBar extends StatelessWidget {
           
           // Center - Dynamic Island
           Container(
-            width: 125 * scale,
-            height: 37 * scale,
+            width: 125 * widget.scale,
+            height: 37 * widget.scale,
             decoration: BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.circular(100 * scale),
+              borderRadius: BorderRadius.circular(100 * widget.scale),
             ),
             child: Stack(
               children: [
@@ -717,11 +751,11 @@ class StatusBar extends StatelessWidget {
                   left: 0,
                   top: 0,
                   child: Container(
-                    width: 80 * scale,
-                    height: 37 * scale,
+                    width: 80 * widget.scale,
+                    height: 37 * widget.scale,
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(100 * scale),
+                      borderRadius: BorderRadius.circular(100 * widget.scale),
                     ),
                   ),
                 ),
@@ -730,8 +764,8 @@ class StatusBar extends StatelessWidget {
                   right: 0,
                   top: 0,
                   child: Container(
-                    width: 37 * scale,
-                    height: 37 * scale,
+                    width: 37 * widget.scale,
+                    height: 37 * widget.scale,
                     decoration: const BoxDecoration(
                       color: Colors.black,
                       shape: BoxShape.circle,
@@ -744,82 +778,82 @@ class StatusBar extends StatelessWidget {
           
           // Right side - Signal, WiFi, Battery
           Container(
-            padding: EdgeInsets.only(right: 11 * scale),
+            padding: EdgeInsets.only(right: 11 * widget.scale),
             child: Row(
               children: [
                 Image.network(
                   'https://www.figma.com/api/mcp/asset/91ca60b5-e670-4ef9-b75e-e963d48571ae',
-                  width: 18 * scale,
-                  height: 12 * scale,
+                  width: 18 * widget.scale,
+                  height: 12 * widget.scale,
+                  color: Colors.white,
                   errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.signal_cellular_4_bar, size: 12 * scale, color: Colors.black);
+                    return Icon(Icons.signal_cellular_4_bar, size: 12 * widget.scale, color: Colors.white);
                   },
                 ),
-                SizedBox(width: 8 * scale),
+                SizedBox(width: 8 * widget.scale),
                 Image.network(
                   'https://www.figma.com/api/mcp/asset/25934e93-b039-47a3-9de5-f73f6c779076',
-                  width: 17 * scale,
-                  height: 12 * scale,
+                  width: 17 * widget.scale,
+                  height: 12 * widget.scale,
+                  color: Colors.white,
                   errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.wifi, size: 12 * scale, color: Colors.black);
+                    return Icon(Icons.wifi, size: 12 * widget.scale, color: Colors.white);
                   },
                 ),
-                SizedBox(width: 8 * scale),
+                SizedBox(width: 8 * widget.scale),
                 // Battery
                 Stack(
                   children: [
                     Image.network(
                       'https://www.figma.com/api/mcp/asset/cfb4be6a-2504-4e27-9780-2f52680600a1',
-                      width: 27.401 * scale,
-                      height: 13 * scale,
+                      width: 27.401 * widget.scale,
+                      height: 13 * widget.scale,
                       fit: BoxFit.fill,
+                      color: Colors.white,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          width: 27.4 * scale,
-                          height: 13 * scale,
+                          width: 27.4 * widget.scale,
+                          height: 13 * widget.scale,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 1.5),
-                            borderRadius: BorderRadius.circular(2 * scale),
+                            border: Border.all(color: Colors.white, width: 1.5),
+                            borderRadius: BorderRadius.circular(2 * widget.scale),
                           ),
                         );
                       },
                     ),
                     Positioned(
                       right: 0,
-                      top: (13 * scale - 4.22 * scale) / 2,
-                      child: Image.network(
-                        'https://www.figma.com/api/mcp/asset/c5e0a220-1205-4b81-8a0d-bd8378fcbe2d',
-                        width: 1.401 * scale,
-                        height: 4.22 * scale,
+                      top: (13 * widget.scale - 4.22 * widget.scale) / 2,
+                        width: 1.401 * widget.scale,
+                        height: 4.22 * widget.scale,
                         fit: BoxFit.fill,
+                        color: Colors.white,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
-                            width: 1.4 * scale,
-                            height: 4.22 * scale,
+                            width: 1.4 * widget.scale,
+                            height: 4.22 * widget.scale,
                             decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(1 * scale),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(1 * widget.scale),
+                                bottomRight: Radius.circular(1 * widget.scale),
+                              ),
                             ),
                           );
                         },
                       ),
                     ),
+                    // Battery level indicator inside
                     Positioned(
-                      left: 2 * scale,
-                      top: 2 * scale,
-                      right: 4.4 * scale,
-                      bottom: 2 * scale,
-                      child: Image.network(
-                        'https://www.figma.com/api/mcp/asset/fe419f57-9920-4caa-8b97-132f6b8f2f05',
-                        fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(1 * scale),
-                            ),
-                          );
-                        },
+                      left: 2 * widget.scale,
+                      top: 2 * widget.scale,
+                      child: Container(
+                        width: 18 * widget.scale,
+                        height: 9 * widget.scale,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(1 * widget.scale),
+                        ),
                       ),
                     ),
                   ],
