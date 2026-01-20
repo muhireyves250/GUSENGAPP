@@ -77,48 +77,33 @@ class HomePage extends StatelessWidget {
                   height: 431 * scale,
                   child: Stack(
                     children: [
-                      // Background pattern overlay (rotated) - contained within hero section
-                      Positioned.fill(
-                        child: Transform.rotate(
-                          angle: 3.14159, // 180 degrees
-                          child: Image.network(
-                            'https://www.figma.com/api/mcp/asset/0d9b7a53-3a96-47c4-bfb4-326d994de217',
-                            width: double.infinity,
-                            height: 431 * scale,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return const SizedBox.shrink();
-                            },
+                      // Background gradient (Replacing broken Figma image)
+                      Container(
+                        width: double.infinity,
+                        height: 431 * scale,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              const Color(0xFF2D3748),
+                              const Color(0xFF1A202C),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(42 * scale),
+                            bottomRight: Radius.circular(42 * scale),
                           ),
                         ),
                       ),
                       
-                      // Background image
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(42 * scale),
-                          bottomRight: Radius.circular(42 * scale),
-                        ),
-                        child: Image.network(
-                          'https://www.figma.com/api/mcp/asset/1c53fe15-c4d4-4c43-93e1-f0fde8a53e56',
-                          width: double.infinity,
-                          height: 431 * scale,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              height: 431 * scale,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    const Color(0xFF4A5568),
-                                    const Color(0xFF2D3748),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                      // Pattern overlay (Code generated)
+                      Positioned.fill(
+                        child: Opacity(
+                          opacity: 0.1,
+                          child: CustomPaint(
+                            painter: PatternPainter(),
+                          ),
                         ),
                       ),
                       
@@ -150,25 +135,17 @@ class HomePage extends StatelessWidget {
               Positioned(
                 left: 36 * scale,
                 top: 190 * scale,
-                child: Image.network(
-                  'https://www.figma.com/api/mcp/asset/af555d16-60d0-4361-b7f1-3423b8b117fc',
+                child: Container(
                   width: 367 * scale,
                   height: 59 * scale,
-                  fit: BoxFit.fill,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 367 * scale,
-                      height: 59 * scale,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(20 * scale),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.3),
-                          width: 1,
-                        ),
-                      ),
-                    );
-                  },
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(20 * scale),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                  ),
                 ),
               ),
               
@@ -196,17 +173,10 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 12 * scale),
-                      Image.network(
-                        'https://www.figma.com/api/mcp/asset/7acbe0b3-dcda-4a91-9cd0-9afcad73ef12',
-                        width: 20 * scale,
-                        height: 20 * scale,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            Icons.search,
-                            color: Colors.white70,
-                            size: 20 * scale,
-                          );
-                        },
+                      Icon(
+                        Icons.search,
+                        color: Colors.white70,
+                        size: 20 * scale,
                       ),
                       SizedBox(width: 12 * scale),
                     ],
@@ -241,25 +211,26 @@ class HomePage extends StatelessWidget {
                   children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20 * scale),
-                          child: Image.network(
-                            'https://www.figma.com/api/mcp/asset/3e8a38c1-eaf4-4219-b2de-628cfc7d9d41',
+                          child: Container(
                             width: videoSectionWidth,
                             height: 177 * scale,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                width: videoSectionWidth,
-                                height: 177 * scale,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      const Color(0xFF48BB78),
-                                      const Color(0xFF38A169),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  const Color(0xFF48BB78),
+                                  const Color(0xFF38A169),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.video_library_rounded,
+                                size: 50 * scale,
+                                color: Colors.white.withValues(alpha: 0.5),
+                              ),
+                            ),
                           ),
                         ),
                         
@@ -270,23 +241,15 @@ class HomePage extends StatelessWidget {
                           right: 0,
                           child: Stack(
                             children: [
-                              Image.network(
-                                'https://www.figma.com/api/mcp/asset/3112a66f-ab6a-4562-99df-528389b7d031',
-                                width: videoSectionWidth,
+                              Container(
                                 height: 57 * scale,
-                                fit: BoxFit.fill,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    height: 57 * scale,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withValues(alpha: 0.6),
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(20 * scale),
-                                        bottomRight: Radius.circular(20 * scale),
-                                      ),
-                                    ),
-                                  );
-                                },
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withValues(alpha: 0.6),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20 * scale),
+                                    bottomRight: Radius.circular(20 * scale),
+                                  ),
+                                ),
                               ),
                               // Rectangle 6 overlay color D9D9D9 30%
                               Container(
@@ -339,17 +302,10 @@ class HomePage extends StatelessWidget {
                                       SizedBox(height: 4 * scale),
                                       Row(
                                         children: [
-                                          Image.network(
-                                            'https://www.figma.com/api/mcp/asset/49f628a0-fcd9-4941-99ee-cc68ca452629',
-                                            width: 15 * scale,
-                                            height: 15 * scale,
-                                            errorBuilder: (context, error, stackTrace) {
-                                              return Icon(
-                                                Icons.calendar_today,
-                                                size: 12 * scale,
-                                                color: const Color(0xFFD1D1D1),
-                                              );
-                                            },
+                                          Icon(
+                                            Icons.calendar_today,
+                                            size: 12 * scale,
+                                            color: const Color(0xFFD1D1D1),
                                           ),
                                           SizedBox(width: 4 * scale),
                                           Text(
@@ -361,17 +317,10 @@ class HomePage extends StatelessWidget {
                                             ),
                                           ),
                                           SizedBox(width: 8 * scale),
-                                          Image.network(
-                                            'https://www.figma.com/api/mcp/asset/9d12510d-02bb-45a5-9d54-838b92374d2f',
-                                            width: 13 * scale,
-                                            height: 12 * scale,
-                                            errorBuilder: (context, error, stackTrace) {
-                                              return Icon(
-                                                Icons.access_time,
-                                                size: 12 * scale,
-                                                color: const Color(0xFFD1D1D1),
-                                              );
-                                            },
+                                          Icon(
+                                            Icons.access_time,
+                                            size: 12 * scale,
+                                            color: const Color(0xFFD1D1D1),
                                           ),
                                           SizedBox(width: 4 * scale),
             Text(
@@ -387,25 +336,18 @@ class HomePage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                Image.network(
-                                  'https://www.figma.com/api/mcp/asset/06e4f4bb-f9e8-4c7a-9b91-61de968fed9e',
+                                Container(
                                   width: 30 * scale,
                                   height: 30 * scale,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      width: 30 * scale,
-                                      height: 30 * scale,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.teal,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        Icons.play_arrow,
-                                        color: Colors.white,
-                                        size: 20 * scale,
-                                      ),
-                                    );
-                                  },
+                                  decoration: const BoxDecoration(
+                                    color: Colors.teal,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.play_arrow,
+                                    color: Colors.white,
+                                    size: 20 * scale,
+                                  ),
                                 ),
                                 SizedBox(width: 10 * scale),
                               ],
@@ -540,21 +482,15 @@ class HomePage extends StatelessWidget {
           // Thumbnail
           ClipRRect(
             borderRadius: BorderRadius.circular(9 * scale),
-            child: Image.network(
-              thumbnailUrl,
+            child: Container(
               width: 60 * scale,
               height: 53 * scale,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 60 * scale,
-                  height: 53 * scale,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[800],
-                    borderRadius: BorderRadius.circular(9 * scale),
-                  ),
-                );
-              },
+              color: Colors.grey[800],
+              child: Icon(
+                Icons.music_note,
+                color: Colors.white54,
+                size: 24 * scale,
+              ),
             ),
           ),
           SizedBox(width: 13 * scale),
@@ -586,20 +522,13 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 6 * scale),
-                    Image.network(
-                      dotUrl,
-                      width: 2 * scale,
-                      height: 2 * scale,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 2 * scale,
-                          height: 2 * scale,
-                          decoration: const BoxDecoration(
-                            color: Colors.white70,
-                            shape: BoxShape.circle,
-                          ),
-                        );
-                      },
+                    Container(
+                      width: 3 * scale,
+                      height: 3 * scale,
+                      decoration: const BoxDecoration(
+                        color: Colors.white70,
+                        shape: BoxShape.circle,
+                      ),
                     ),
                     SizedBox(width: 6 * scale),
                     Text(
@@ -630,40 +559,26 @@ class HomePage extends StatelessWidget {
                 ),
               );
             },
-            child: Image.network(
-              playUrl,
+            child: Container(
               width: 35 * scale,
               height: 35 * scale,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: 35 * scale,
-                  height: 35 * scale,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.5),
-                  ),
-                  child: Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                    size: 20 * scale,
-                  ),
-                );
-              },
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 1.5),
+              ),
+              child: Icon(
+                Icons.play_arrow,
+                color: Colors.white,
+                size: 20 * scale,
+              ),
             ),
           ),
           SizedBox(width: 5 * scale),
-          // More button (vertical)
-          Image.network(
-            moreUrl,
-            width: 35 * scale,
-            height: 35 * scale,
-            errorBuilder: (context, error, stackTrace) {
-              return Icon(
-                Icons.more_vert,
-                color: Colors.white,
-                size: 24 * scale,
-              );
-            },
+            // More button (vertical)
+          Icon(
+            Icons.more_vert,
+            color: Colors.white,
+            size: 24 * scale,
           ),
           SizedBox(width: 10 * scale),
         ],
@@ -781,83 +696,11 @@ class _StatusBarState extends State<StatusBar> {
             padding: EdgeInsets.only(right: 11 * widget.scale),
             child: Row(
               children: [
-                Image.network(
-                  'https://www.figma.com/api/mcp/asset/91ca60b5-e670-4ef9-b75e-e963d48571ae',
-                  width: 18 * widget.scale,
-                  height: 12 * widget.scale,
-                  color: Colors.white,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.signal_cellular_4_bar, size: 12 * widget.scale, color: Colors.white);
-                  },
-                ),
+                Icon(Icons.signal_cellular_4_bar, size: 16 * widget.scale, color: Colors.white),
                 SizedBox(width: 8 * widget.scale),
-                Image.network(
-                  'https://www.figma.com/api/mcp/asset/25934e93-b039-47a3-9de5-f73f6c779076',
-                  width: 17 * widget.scale,
-                  height: 12 * widget.scale,
-                  color: Colors.white,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.wifi, size: 12 * widget.scale, color: Colors.white);
-                  },
-                ),
+                Icon(Icons.wifi, size: 16 * widget.scale, color: Colors.white),
                 SizedBox(width: 8 * widget.scale),
-                // Battery
-                Stack(
-                  children: [
-                    Image.network(
-                      'https://www.figma.com/api/mcp/asset/cfb4be6a-2504-4e27-9780-2f52680600a1',
-                      width: 27.401 * widget.scale,
-                      height: 13 * widget.scale,
-                      fit: BoxFit.fill,
-                      color: Colors.white,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 27.4 * widget.scale,
-                          height: 13 * widget.scale,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1.5),
-                            borderRadius: BorderRadius.circular(2 * widget.scale),
-                          ),
-                        );
-                      },
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: (13 * widget.scale - 4.22 * widget.scale) / 2,
-                        width: 1.401 * widget.scale,
-                        height: 4.22 * widget.scale,
-                        fit: BoxFit.fill,
-                        color: Colors.white,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: 1.4 * widget.scale,
-                            height: 4.22 * widget.scale,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(1 * widget.scale),
-                                bottomRight: Radius.circular(1 * widget.scale),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    // Battery level indicator inside
-                    Positioned(
-                      left: 2 * widget.scale,
-                      top: 2 * widget.scale,
-                      child: Container(
-                        width: 18 * widget.scale,
-                        height: 9 * widget.scale,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(1 * widget.scale),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                Icon(Icons.battery_full, size: 16 * widget.scale, color: Colors.white),
               ],
             ),
           ),
@@ -865,5 +708,25 @@ class _StatusBarState extends State<StatusBar> {
       ),
     );
   }
+}
+
+class PatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
+
+    final path = Path();
+    for (var i = 0.0; i < size.width; i += 20) {
+      path.moveTo(i, 0);
+      path.lineTo(i - 20, size.height);
+    }
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 

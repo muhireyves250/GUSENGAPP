@@ -382,21 +382,15 @@ class _DownloadItemWidgetState extends State<DownloadItemWidget> {
             // Thumbnail
             ClipRRect(
               borderRadius: BorderRadius.circular(9 * widget.scale),
-              child: Image.network(
-                widget.thumbnailUrl,
+              child: Container(
                 width: 60 * widget.scale,
                 height: 53 * widget.scale,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 60 * widget.scale,
-                    height: 53 * widget.scale,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800],
-                      borderRadius: BorderRadius.circular(9 * widget.scale),
-                    ),
-                  );
-                },
+                color: Colors.grey[800],
+                child: Icon(
+                  Icons.music_note,
+                  color: Colors.white54,
+                  size: 24 * widget.scale,
+                ),
               ),
             ),
             SizedBox(width: 13 * widget.scale),
@@ -428,20 +422,13 @@ class _DownloadItemWidgetState extends State<DownloadItemWidget> {
                         ),
                       ),
                       SizedBox(width: 6 * widget.scale),
-                      Image.network(
-                        widget.dotUrl,
-                        width: 2 * widget.scale,
-                        height: 2 * widget.scale,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: 2 * widget.scale,
-                            height: 2 * widget.scale,
-                            decoration: const BoxDecoration(
-                              color: Colors.white70,
-                              shape: BoxShape.circle,
-                            ),
-                          );
-                        },
+                      Container(
+                        width: 3 * widget.scale,
+                        height: 3 * widget.scale,
+                        decoration: const BoxDecoration(
+                          color: Colors.white70,
+                          shape: BoxShape.circle,
+                        ),
                       ),
                       SizedBox(width: 6 * widget.scale),
                       Text(

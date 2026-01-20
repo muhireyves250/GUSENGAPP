@@ -115,7 +115,7 @@ class PlayerPage extends StatelessWidget {
                                 child: Icon(
                                   Icons.music_note,
                                   size: 100 * scale,
-                                  color: Colors.white.withValues(alpha: 0.5),
+                                  color: Colors.white.withOpacity(0.5),
                                 ),
                               );
                             },
@@ -215,7 +215,7 @@ class PlayerPage extends StatelessWidget {
                               ),
                               SizedBox(height: 8 * scale),
                               // Waveform visualization
-                              Container(
+                              SizedBox(
                                 width: contentWidth,
                                 height: 40 * scale,
                                 child: Row(
@@ -230,7 +230,7 @@ class PlayerPage extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         color: isPlayed 
                                             ? const Color(0xFFFF6B35) // Orange for played
-                                            : Colors.white.withValues(alpha: 0.3), // White for unplayed
+                                            : Colors.white.withOpacity(0.3), // White for unplayed
                                         borderRadius: BorderRadius.circular(1.5 * scale),
                                       ),
                                     );

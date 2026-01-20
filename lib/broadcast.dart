@@ -330,7 +330,7 @@ class BroadcastPage extends StatelessWidget {
                     return Container(
                       height: 57 * scale,
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.6),
+                        color: Colors.black.withOpacity(0.6),
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(20 * scale),
                           bottomRight: Radius.circular(20 * scale),
@@ -344,7 +344,7 @@ class BroadcastPage extends StatelessWidget {
                   width: width,
                   height: 57 * scale,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFD9D9D9).withValues(alpha: 0.3),
+                    color: const Color(0xFFD9D9D9).withOpacity(0.3),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20 * scale),
                       bottomRight: Radius.circular(20 * scale),
@@ -491,8 +491,8 @@ class BroadcastPage extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFFC0C0C0).withValues(alpha: 0.25), // 0% - 25%
-              const Color(0xFF999999).withValues(alpha: 0.63), // 50% - 63%
+              const Color(0xFFC0C0C0).withOpacity(0.25), // 0% - 25%
+              const Color(0xFF999999).withOpacity(0.63), // 50% - 63%
               const Color(0xFF737373), // 100% - 100%
             ],
             stops: const [0.0, 0.5, 1.0],
@@ -547,7 +547,7 @@ class BroadcastPage extends StatelessWidget {
                         style: GoogleFonts.manrope(
                           fontSize: 12 * scale,
                           fontWeight: FontWeight.normal,
-                          color: const Color(0xFFD1D1D1).withValues(alpha: 0.7),
+                          color: const Color(0xFFD1D1D1).withOpacity(0.7),
                         ),
                       ),
                       SizedBox(width: 6 * scale),
@@ -572,7 +572,7 @@ class BroadcastPage extends StatelessWidget {
                         style: GoogleFonts.manrope(
                           fontSize: 12 * scale,
                           fontWeight: FontWeight.normal,
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: Colors.white.withOpacity(0.7),
                         ),
                       ),
                     ],

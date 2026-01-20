@@ -1,25 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'navigation_bar.dart';
+import 'login.dart';
+import 'admin_dashboard.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key, bool? hideNavigationBar}) 
       : hideNavigationBar = hideNavigationBar ?? false;
   
   final bool hideNavigationBar;
 
   @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  bool _isLoggedIn = false;
+  String? _adminUsername;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLoggedIn = prefs.containsKey('adminToken');
+      _adminUsername = prefs.getString('username');
+    });
+  }
+
+  Future<void> _handleLogout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('adminToken');
+    await prefs.remove('username');
+    _checkLoginStatus();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final screenSize = mediaQuery.size;
-    final screenWidth = screenSize.width;
-    final screenHeight = screenSize.height;
+    final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height;
     final padding = mediaQuery.padding;
-    
-    // Figma design dimensions: 440px width, 956px height (same as home page)
+    final hideNavigationBar = widget.hideNavigationBar;
+
+    // Figma design dimensions: 440px width, 956px height
     final designWidth = 440.0;
     final designHeight = 956.0;
-    
+
     // Calculate scale based on width to maintain design proportions
     final scale = screenWidth / designWidth;
     final heightScale = (screenHeight - padding.top - padding.bottom) / designHeight;
@@ -78,7 +110,7 @@ class SettingsPage extends StatelessWidget {
                               style: GoogleFonts.abhayaLibre(
                                 fontSize: 25 * scale,
                                 fontWeight: FontWeight.w800,
-                                color: Colors.white.withValues(alpha: 0.7),
+                                color: Colors.white.withOpacity(0.7),
                               ),
                             ),
                           ),
@@ -134,7 +166,7 @@ class SettingsPage extends StatelessWidget {
                                           style: GoogleFonts.manrope(
                                             fontSize: 12 * scale,
                                             fontWeight: FontWeight.normal,
-                                            color: Colors.white.withValues(alpha: 0.7),
+                                            color: Colors.white.withOpacity(0.7),
                                           ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -191,15 +223,50 @@ class SettingsPage extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 36 * scale),
                             child: Column(
                               children: [
-                                _buildContactButton(scale: finalScale),
+                                _buildSettingItem(
+                                  scale: finalScale,
+                                  icon: Icons.chat_bubble_outline,
+                                  title: 'Contact us',
+                                  iconColor: Colors.green,
+                                ),
                                 SizedBox(height: 12 * scale),
-                                _buildContactButton(scale: finalScale),
+                                if (_isLoggedIn)
+                                  _buildSettingItem(
+                                    scale: finalScale,
+                                    icon: Icons.dashboard_rounded,
+                                    title: 'Admin Dashboard',
+                                    iconColor: Colors.purple,
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const AdminDashboard()),
+                                      );
+                                    },
+                                  ),
+                                if (_isLoggedIn)
+                                  SizedBox(height: 12 * scale),
+                                _buildSettingItem(
+                                  scale: finalScale,
+                                  icon: _isLoggedIn ? Icons.logout : Icons.admin_panel_settings_outlined,
+                                  title: _isLoggedIn ? 'Logout ($_adminUsername)' : 'Admin Login',
+                                  iconColor: _isLoggedIn ? Colors.redAccent : Colors.teal,
+                                  onTap: () {
+                                    if (_isLoggedIn) {
+                                      _handleLogout();
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                                      );
+                                    }
+                                  },
+                                ),
                                 SizedBox(height: 12 * scale),
-                                _buildContactButton(scale: finalScale),
+                                _buildSettingItem(scale: finalScale, title: 'Share App', icon: Icons.share),
                                 SizedBox(height: 12 * scale),
-                                _buildContactButton(scale: finalScale),
+                                _buildSettingItem(scale: finalScale, title: 'Rate Us', icon: Icons.star_border),
                                 SizedBox(height: 12 * scale),
-                                _buildContactButton(scale: finalScale),
+                                _buildSettingItem(scale: finalScale, title: 'Privacy Policy', icon: Icons.privacy_tip_outlined),
                               ],
                             ),
                           ),
@@ -233,50 +300,56 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildContactButton({required double scale}) {
-    return Container(
-      height: 60 * scale,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1A1A1A).withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(17 * scale),
-      ),
-      child: Row(
-        children: [
-          SizedBox(width: 16 * scale),
-          // WhatsApp-like chat bubble icon
-          Container(
-            width: 30 * scale,
-            height: 30 * scale,
-            decoration: BoxDecoration(
-              color: Colors.green.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(8 * scale),
-            ),
-            child: Icon(
-              Icons.chat_bubble_outline,
-              color: Colors.green,
-              size: 20 * scale,
-            ),
-          ),
-          SizedBox(width: 16 * scale),
-          // "Contact us" text
-          Expanded(
-            child: Text(
-              'Contact us',
-              style: GoogleFonts.manrope(
-                fontSize: 16 * scale,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+  Widget _buildSettingItem({
+    required double scale, 
+    required String title,
+    required IconData icon,
+    Color iconColor = Colors.white,
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 60 * scale,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1A1A).withOpacity(0.8),
+          borderRadius: BorderRadius.circular(17 * scale),
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 16 * scale),
+            Container(
+              width: 30 * scale,
+              height: 30 * scale,
+              decoration: BoxDecoration(
+                color: iconColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8 * scale),
+              ),
+              child: Icon(
+                icon,
+                color: iconColor,
+                size: 20 * scale,
               ),
             ),
-          ),
-          // Arrow icon
-          Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.white.withValues(alpha: 0.5),
-            size: 16 * scale,
-          ),
-          SizedBox(width: 16 * scale),
-        ],
+            SizedBox(width: 16 * scale),
+            Expanded(
+              child: Text(
+                title,
+                style: GoogleFonts.manrope(
+                  fontSize: 16 * scale,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white.withOpacity(0.5),
+              size: 16 * scale,
+            ),
+            SizedBox(width: 16 * scale),
+          ],
+        ),
       ),
     );
   }
