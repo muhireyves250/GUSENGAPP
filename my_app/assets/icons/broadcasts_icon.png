@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="braordcastis-btn">
+<rect id="broadcacst-div" width="55" height="55" rx="19" fill="var(--fill-0, #D9D9D9)"/>
+<path id="broadcast-bg" d="M35.6909 1C45.8027 1 54 9.19726 54 19.3091V35.6909C54 45.8027 45.8027 54 35.6909 54H19.3091C9.19726 54 1 45.8027 1 35.6909V19.3091C1 9.19726 9.19726 1 19.3091 1H35.6909Z" fill="var(--fill-0, #221A1A)"/>
+<g id="radio-stroke-rounded 1">
+<path id="Vector" d="M31.3542 34.2083C34.3342 34.2083 36.75 31.7925 36.75 28.8125C36.75 25.8325 34.3342 23.4167 31.3542 23.4167C28.3741 23.4167 25.9583 25.8325 25.9583 28.8125C25.9583 31.7925 28.3741 34.2083 31.3542 34.2083Z" stroke="var(--stroke-0, white)" stroke-width="1.5"/>
+<path id="Vector_2" d="M12.0833 28.8125C12.0833 23.018 12.0833 20.1208 13.7064 18.1865C13.966 17.8771 14.2521 17.591 14.5615 17.3314C16.4958 15.7083 19.393 15.7083 25.1875 15.7083H29.8125C35.607 15.7083 38.5043 15.7083 40.4384 17.3314C40.7479 17.591 41.034 17.8771 41.2936 18.1865C42.9167 20.1208 42.9167 23.018 42.9167 28.8125C42.9167 34.607 42.9167 37.5043 41.2936 39.4384C41.034 39.7479 40.7479 40.034 40.4384 40.2936C38.5043 41.9167 35.607 41.9167 29.8125 41.9167H25.1875C19.393 41.9167 16.4958 41.9167 14.5615 40.2936C14.2521 40.034 13.966 39.7479 13.7064 39.4384C12.0833 37.5043 12.0833 34.607 12.0833 28.8125Z" stroke="var(--stroke-0, white)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M24.4167 15.7083L30.5833 11.0833" stroke="var(--stroke-0, white)" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Vector_4" d="M18.25 26.5H19.7917M18.25 31.125H19.7917" stroke="var(--stroke-0, white)" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+</g>
+</svg>
