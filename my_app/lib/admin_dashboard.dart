@@ -426,9 +426,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
     final videoCount = _broadcasts.where((b) => b['type'] == 'video').length;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF000000), // Pure black background
+      backgroundColor: const Color(0xFF121212), // Deep Matte Black
       body: Container(
-        color: const Color(0xFF0A0A0A), // Extremely subtle off-black for depth
+        color: const Color(0xFF121212),
         child: Stack(
           children: [
             SafeArea(
@@ -501,48 +501,64 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   Widget _buildHeader(double scale) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24 * scale, vertical: 20 * scale),
-      decoration: const BoxDecoration(
-        color: Colors.transparent, // Clean, no borders or background for header in V2
-      ),
+      padding: EdgeInsets.fromLTRB(24 * scale, 10 * scale, 24 * scale, 30 * scale),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Overview',
-                  style: GoogleFonts.inter( // Using Inter or Manrope for cleaner look
-                    fontSize: 28 * scale,
-                    fontWeight: FontWeight.bold, // Using w600/w700
+                 Text(
+                  'Admin\nDashboard', // Stacked like "Jay Majors"
+                  style: GoogleFonts.manrope(
+                    fontSize: 36 * scale,
+                    fontWeight: FontWeight.w800,
                     color: Colors.white,
-                    letterSpacing: -0.5,
+                    height: 1.1,
+                    letterSpacing: -1.0,
                   ),
                 ),
-                SizedBox(height: 4 * scale),
-                Text(
-                  'Hello, $_username',
-                  style: GoogleFonts.inter(
-                    fontSize: 14 * scale,
-                    color: Colors.white54,
-                    fontWeight: FontWeight.w400,
-                  ),
+                SizedBox(height: 8 * scale),
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(2 * scale),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF2962FF), // Blue ring
+                        shape: BoxShape.circle,
+                      ),
+                      child: CircleAvatar(
+                        radius: 12 * scale,
+                        backgroundColor: Colors.grey[800],
+                        child: Text(
+                          _username?.substring(0, 1).toUpperCase() ?? 'A',
+                          style: GoogleFonts.manrope(
+                            fontSize: 12 * scale, 
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8 * scale),
+                    Text(
+                      '$_username',
+                      style: GoogleFonts.manrope(
+                        fontSize: 16 * scale,
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E1E1E),
-              borderRadius: BorderRadius.circular(12 * scale),
-              border: Border.all(color: Colors.white10),
-            ),
-            child: IconButton(
-              icon: Icon(Icons.logout_rounded, color: Colors.white70, size: 20 * scale),
-              onPressed: _logout,
-              tooltip: 'Logout',
-            ),
+          IconButton(
+            onPressed: _logout,
+            icon: Icon(Icons.logout, color: Colors.white38, size: 28 * scale),
           ),
         ],
       ),
@@ -550,68 +566,144 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   Widget _buildStatistics(double scale, int audioCount, int videoCount) {
-    // Flattened statistics
-    return Row(
+    // Bento Grid Layout
+    return Column(
       children: [
-        Expanded(
-          child: _buildStatCard(
-            scale,
-            'Total Files',
-            _broadcasts.length.toString(),
-            Icons.folder_outlined,
-          ),
+        // Main Wide Card - Total
+        _buildBentoCard(
+          scale, 
+          title: 'Total Broadcasts',
+          value: _broadcasts.length.toString(),
+          subtitle: 'All files',
+          percent: 1.0, // Full bar
+          isWide: true,
         ),
-        SizedBox(width: 12 * scale),
-        Expanded(
-          child: _buildStatCard(
-            scale,
-            'Audio',
-            audioCount.toString(),
-            Icons.headphones,
-          ),
-        ),
-        SizedBox(width: 12 * scale),
-        Expanded(
-          child: _buildStatCard(
-            scale,
-            'Video',
-            videoCount.toString(),
-            Icons.videocam_outlined,
-          ),
+        SizedBox(height: 16 * scale),
+        // Split Cards
+        Row(
+          children: [
+            Expanded(
+              child: _buildBentoCard(
+                scale,
+                title: 'Audio',
+                value: audioCount.toString(),
+                subtitle: 'Tracks',
+                percent: _broadcasts.isEmpty ? 0 : audioCount / _broadcasts.length,
+              ),
+            ),
+            SizedBox(width: 16 * scale),
+            Expanded(
+              child: _buildBentoCard(
+                scale,
+                title: 'Video',
+                value: videoCount.toString(),
+                subtitle: 'Clips',
+                percent: _broadcasts.isEmpty ? 0 : videoCount / _broadcasts.length,
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildStatCard(double scale, String label, String value, IconData icon) {
+  Widget _buildBentoCard(double scale, {
+    required String title,
+    required String value,
+    required String subtitle,
+    required double percent,
+    bool isWide = false,
+  }) {
     return Container(
-      padding: EdgeInsets.all(16 * scale),
+      width: double.infinity,
+      padding: EdgeInsets.all(24 * scale),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
-        borderRadius: BorderRadius.circular(16 * scale),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        color: const Color(0xFF1E1E1E), // Dark Grey Card
+        borderRadius: BorderRadius.circular(24 * scale),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.white54, size: 20 * scale),
-          SizedBox(height: 16 * scale),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 24 * scale,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: GoogleFonts.manrope(
+                  fontSize: 15 * scale,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white70,
+                ),
+              ),
+              if (isWide)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8 * scale, vertical: 4 * scale),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8 * scale),
+                  ),
+                  child: Text(
+                    '100%',
+                    style: GoogleFonts.manrope(
+                      fontSize: 12 * scale,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+            ],
           ),
-          SizedBox(height: 2 * scale),
-          Text(
-            label,
-            style: GoogleFonts.inter(
-              fontSize: 11 * scale,
-              fontWeight: FontWeight.w500,
-              color: Colors.white38,
-            ),
+          SizedBox(height: isWide ? 12 * scale : 24 * scale),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                value,
+                style: GoogleFonts.manrope(
+                  fontSize: 48 * scale, // Big Number
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                  letterSpacing: -2.0,
+                  height: 1.0,
+                ),
+              ),
+              SizedBox(width: 8 * scale),
+              Padding(
+                padding: EdgeInsets.only(bottom: 6 * scale),
+                child: Text(
+                  subtitle,
+                  style: GoogleFonts.manrope(
+                    fontSize: 14 * scale,
+                    color: Colors.white38,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 24 * scale),
+          // Progress Bar
+          Stack(
+            children: [
+              Container(
+                height: 6 * scale,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF333333),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: percent.clamp(0.01, 1.0), // Ensure at least a tiny dot
+                child: Container(
+                  height: 6 * scale,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2962FF), // Electric Blue
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -626,11 +718,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
           padding: EdgeInsets.only(left: 4 * scale, bottom: 20 * scale),
           child: Text(
             'Quick Actions',
-            style: GoogleFonts.inter(
-              fontSize: 16 * scale,
+            style: GoogleFonts.manrope(
+              fontSize: 18 * scale,
               fontWeight: FontWeight.w600,
               color: Colors.white,
-              letterSpacing: 0.2,
             ),
           ),
         ),
