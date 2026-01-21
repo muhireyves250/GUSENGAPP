@@ -1,4 +1,4 @@
-#Tue Jan 20 17:58:55 CAT 2026
+#Wed Jan 21 23:09:26 CAT 2026
 base.0=D\:\\GUSENGA-APP\\my_app\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=D\:\\GUSENGA-APP\\my_app\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
 base.2=D\:\\GUSENGA-APP\\my_app\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
