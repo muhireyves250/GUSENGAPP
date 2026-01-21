@@ -426,19 +426,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
     final videoCount = _broadcasts.where((b) => b['type'] == 'video').length;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF000000), // Pure black background
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              const Color(0xFF0F2027),
-              const Color(0xFF203A43),
-              const Color(0xFF2C5364),
-            ],
-          ),
-        ),
+        color: const Color(0xFF0A0A0A), // Extremely subtle off-black for depth
         child: Stack(
           children: [
             SafeArea(
@@ -456,43 +446,39 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.error_outline, color: Colors.redAccent, size: 48 * scale),
+                                    Icon(Icons.error_outline, color: Colors.amber, size: 48 * scale), // Amber for warning/error
                                     SizedBox(height: 16 * scale),
                                     Text(
                                       _errorMessage!,
-                                      style: GoogleFonts.manrope(color: Colors.white70),
+                                      style: GoogleFonts.inter(color: Colors.white70), // Switched to Inter for more "pro" look if available, else standard
                                     ),
                                     SizedBox(height: 16 * scale),
-                                    ElevatedButton(
+                                    TextButton(
                                       onPressed: _loadBroadcasts,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white.withOpacity(0.1),
-                                        foregroundColor: Colors.white,
-                                      ),
-                                      child: const Text('Retry'),
+                                      child: const Text('Retry', style: TextStyle(color: Colors.white)),
                                     ),
                                   ],
                                 ),
                               )
                             : RefreshIndicator(
                                 onRefresh: _loadBroadcasts,
-                                color: const Color(0xFF4CAF50),
-                                backgroundColor: const Color(0xFF1A1A1A),
+                                color: const Color(0xFF2196F3),
+                                backgroundColor: const Color(0xFF1E1E1E),
                                 child: SingleChildScrollView(
                                   physics: const AlwaysScrollableScrollPhysics(),
-                                  padding: EdgeInsets.all(20 * scale),
+                                  padding: EdgeInsets.symmetric(horizontal: 24 * scale, vertical: 24 * scale),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       // Statistics
                                       _buildStatistics(scale, audioCount, videoCount),
                                       
-                                      SizedBox(height: 32 * scale),
+                                      SizedBox(height: 40 * scale),
                                       
                                       // Quick Actions
                                       _buildQuickActions(scale),
                                       
-                                      SizedBox(height: 32 * scale),
+                                      SizedBox(height: 40 * scale),
                                       
                                       // Broadcasts List
                                       _buildBroadcastsList(scale),
@@ -510,193 +496,124 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ),
       ),
     );
+  
   }
 
   Widget _buildHeader(double scale) {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20 * scale, vertical: 20 * scale),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.03),
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.white.withOpacity(0.05),
-                width: 1,
-              ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24 * scale, vertical: 20 * scale),
+      decoration: const BoxDecoration(
+        color: Colors.transparent, // Clean, no borders or background for header in V2
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Overview',
+                  style: GoogleFonts.inter( // Using Inter or Manrope for cleaner look
+                    fontSize: 28 * scale,
+                    fontWeight: FontWeight.bold, // Using w600/w700
+                    color: Colors.white,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+                SizedBox(height: 4 * scale),
+                Text(
+                  'Hello, $_username',
+                  style: GoogleFonts.inter(
+                    fontSize: 14 * scale,
+                    color: Colors.white54,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
             ),
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 44 * scale,
-                height: 44 * scale,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFE0E0E0), Color(0xFFBDBDBD)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12 * scale),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.admin_panel_settings_rounded,
-                  color: Colors.black87,
-                  size: 26 * scale,
-                ),
-              ),
-              SizedBox(width: 16 * scale),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Admin Dashboard',
-                      style: GoogleFonts.manrope(
-                        fontSize: 20 * scale,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    Text(
-                      'Welcome back, $_username',
-                      style: GoogleFonts.manrope(
-                        fontSize: 13 * scale,
-                        color: Colors.white.withOpacity(0.6),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.logout_rounded, color: Colors.white70, size: 20 * scale),
-                  onPressed: _logout,
-                  tooltip: 'Logout',
-                ),
-              ),
-            ],
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E1E1E),
+              borderRadius: BorderRadius.circular(12 * scale),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.logout_rounded, color: Colors.white70, size: 20 * scale),
+              onPressed: _logout,
+              tooltip: 'Logout',
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
   Widget _buildStatistics(double scale, int audioCount, int videoCount) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    // Flattened statistics
+    return Row(
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 4 * scale, bottom: 16 * scale),
-          child: Text(
-            'Overview',
-            style: GoogleFonts.manrope(
-              fontSize: 18 * scale,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+        Expanded(
+          child: _buildStatCard(
+            scale,
+            'Total Files',
+            _broadcasts.length.toString(),
+            Icons.folder_outlined,
           ),
         ),
-        Row(
-          children: [
-            Expanded(
-              child: _buildStatCard(
-                scale,
-                'Total',
-                _broadcasts.length.toString(),
-                Icons.dashboard_customize_rounded,
-                [const Color(0xFF43E97B), const Color(0xFF38F9D7)],
-              ),
-            ),
-            SizedBox(width: 12 * scale),
-            Expanded(
-              child: _buildStatCard(
-                scale,
-                'Audio',
-                audioCount.toString(),
-                Icons.headphones_rounded,
-                [const Color(0xFF4FACFE), const Color(0xFF00F2FE)],
-              ),
-            ),
-            SizedBox(width: 12 * scale),
-            Expanded(
-              child: _buildStatCard(
-                scale,
-                'Video',
-                videoCount.toString(),
-                Icons.videocam_rounded,
-                [const Color(0xFFFA709A), const Color(0xFFFEE140)],
-              ),
-            ),
-          ],
+        SizedBox(width: 12 * scale),
+        Expanded(
+          child: _buildStatCard(
+            scale,
+            'Audio',
+            audioCount.toString(),
+            Icons.headphones,
+          ),
+        ),
+        SizedBox(width: 12 * scale),
+        Expanded(
+          child: _buildStatCard(
+            scale,
+            'Video',
+            videoCount.toString(),
+            Icons.videocam_outlined,
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildStatCard(double scale, String label, String value, IconData icon, List<Color> gradients) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20 * scale),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-        child: Container(
-          padding: EdgeInsets.all(16 * scale),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(20 * scale),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.08),
+  Widget _buildStatCard(double scale, String label, String value, IconData icon) {
+    return Container(
+      padding: EdgeInsets.all(16 * scale),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.circular(16 * scale),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.white54, size: 20 * scale),
+          SizedBox(height: 16 * scale),
+          Text(
+            value,
+            style: GoogleFonts.inter(
+              fontSize: 24 * scale,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.all(8 * scale),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: gradients,
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(10 * scale),
-                ),
-                child: Icon(icon, color: Colors.white, size: 20 * scale),
-              ),
-              SizedBox(height: 16 * scale),
-              Text(
-                value,
-                style: GoogleFonts.manrope(
-                  fontSize: 24 * scale,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                label,
-                style: GoogleFonts.manrope(
-                  fontSize: 12 * scale,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white.withOpacity(0.5),
-                ),
-              ),
-            ],
+          SizedBox(height: 2 * scale),
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 11 * scale,
+              fontWeight: FontWeight.w500,
+              color: Colors.white38,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -706,36 +623,34 @@ class _AdminDashboardState extends State<AdminDashboard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
          Padding(
-          padding: EdgeInsets.only(left: 4 * scale, bottom: 16 * scale),
+          padding: EdgeInsets.only(left: 4 * scale, bottom: 20 * scale),
           child: Text(
-            'Actions',
-            style: GoogleFonts.manrope(
-              fontSize: 18 * scale,
-              fontWeight: FontWeight.bold,
+            'Quick Actions',
+            style: GoogleFonts.inter(
+              fontSize: 16 * scale,
+              fontWeight: FontWeight.w600,
               color: Colors.white,
+              letterSpacing: 0.2,
             ),
           ),
         ),
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildActionTile(
                 scale,
                 'Upload Audio',
-                Icons.music_note_rounded,
-                const Color(0xFF6A11CB),
-                const Color(0xFF2575FC),
+                Icons.add_circle_outline_rounded,
                 () => _showUploadAudioDialog(scale),
+                isPrimary: true,
               ),
             ),
             SizedBox(width: 12 * scale),
             Expanded(
-              child: _buildActionCard(
+              child: _buildActionTile(
                 scale,
                 'Add Video',
-                Icons.play_circle_filled_rounded,
-                const Color(0xFFFF512F),
-                const Color(0xFFDD2476),
+                Icons.video_call_outlined,
                 () => _showAddVideoDialog(scale),
               ),
             ),
@@ -745,23 +660,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildActionTile(
                 scale,
-                'Update Hero',
-                Icons.image_rounded,
-                const Color(0xFFFF9966),
-                const Color(0xFFFF5E62),
+                'Change Hero',
+                Icons.image_outlined,
                 () => _showUpdateHeroDialog(scale),
               ),
             ),
             SizedBox(width: 12 * scale),
             Expanded(
-              child: _buildActionCard(
+              child: _buildActionTile(
                 scale,
-                'Update Logo',
-                Icons.branding_watermark_rounded,
-                const Color(0xFF8E2DE2),
-                const Color(0xFF4A00E0),
+                'Change Logo',
+                Icons.branding_watermark_outlined,
                 () => _showUpdateLogoDialog(scale),
               ),
             ),
@@ -771,59 +682,39 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  Widget _buildActionCard(double scale, String label, IconData icon, Color color1, Color color2, VoidCallback onTap) {
+  Widget _buildActionTile(double scale, String label, IconData icon, VoidCallback onTap, {bool isPrimary = false}) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20 * scale),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20 * scale),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 24 * scale, horizontal: 12 * scale),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
-                borderRadius: BorderRadius.circular(20 * scale),
-                border: Border.all(color: Colors.white.withOpacity(0.05)),
+        borderRadius: BorderRadius.circular(16 * scale),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 20 * scale, horizontal: 16 * scale),
+          decoration: BoxDecoration(
+            color: isPrimary ? const Color(0xFF2196F3) : const Color(0xFF1E1E1E),
+            borderRadius: BorderRadius.circular(16 * scale),
+            border: isPrimary ? null : Border.all(color: Colors.white.withOpacity(0.05)),
+            boxShadow: isPrimary 
+              ? [BoxShadow(color: const Color(0xFF2196F3).withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4))] 
+              : null,
+          ),
+          child: Column(
+            children: [
+              Icon(
+                icon, 
+                color: isPrimary ? Colors.white : Colors.white70, 
+                size: 26 * scale
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(12 * scale),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [color1, color2],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: color1.withOpacity(0.4),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Icon(icon, color: Colors.white, size: 24 * scale),
-                  ),
-                  SizedBox(height: 16 * scale),
-                  Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.manrope(
-                      fontSize: 13 * scale,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white.withOpacity(0.9),
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                ],
+              SizedBox(height: 12 * scale),
+              Text(
+                label,
+                style: GoogleFonts.inter(
+                  fontSize: 13 * scale,
+                  fontWeight: FontWeight.w600,
+                  color: isPrimary ? Colors.white : Colors.white70,
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -832,58 +723,70 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   Widget _buildBroadcastsList(double scale) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 4 * scale, bottom: 16 * scale),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Recent Broadcasts',
-                style: GoogleFonts.manrope(
-                  fontSize: 18 * scale,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Recent Broadcasts',
+              style: GoogleFonts.inter(
+                fontSize: 16 * scale,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                letterSpacing: 0.2,
+              ),
+            ),
+            // Minimalist badge
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8 * scale, vertical: 4 * scale),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E1E1E),
+                borderRadius: BorderRadius.circular(8 * scale),
+                border: Border.all(color: Colors.white10),
+              ),
+              child: Text(
+                '${_broadcasts.length}',
+                style: GoogleFonts.inter(
+                  fontSize: 12 * scale,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white70,
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10 * scale, vertical: 4 * scale),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '${_broadcasts.length} Total',
-                  style: GoogleFonts.manrope(
-                    fontSize: 11 * scale,
-                    color: Colors.white70,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
+        SizedBox(height: 16 * scale),
         if (_broadcasts.isEmpty)
-          Center(
-            child: Padding(
-              padding: EdgeInsets.all(32 * scale),
-              child: Column(
-                children: [
-                  Icon(Icons.library_music_outlined, size: 48 * scale, color: Colors.white24),
-                  SizedBox(height: 16 * scale),
-                  Text(
-                    'No broadcasts yet',
-                    style: GoogleFonts.manrope(
-                      color: Colors.white.withOpacity(0.5),
-                    ),
+          Container(
+            padding: EdgeInsets.all(32 * scale),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E1E1E),
+              borderRadius: BorderRadius.circular(16 * scale),
+              border: Border.all(color: Colors.white.withOpacity(0.02)),
+            ),
+            child: Column(
+              children: [
+                Icon(Icons.inbox_outlined, size: 40 * scale, color: Colors.white24),
+                SizedBox(height: 12 * scale),
+                Text(
+                  'No broadcasts yet',
+                  style: GoogleFonts.inter(
+                    color: Colors.white38,
+                    fontSize: 14 * scale,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           )
         else
-          ..._broadcasts.map((broadcast) => _buildBroadcastItem(scale, broadcast)),
+          ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _broadcasts.length,
+            separatorBuilder: (context, index) => SizedBox(height: 12 * scale),
+            itemBuilder: (context, index) => _buildBroadcastItem(scale, _broadcasts[index]),
+          ),
       ],
     );
   }
@@ -892,12 +795,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
     final isAudio = broadcast['type'] == 'audio';
     
     return Container(
-      margin: EdgeInsets.only(bottom: 12 * scale),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.03),
+        color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(16 * scale),
         border: Border.all(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withOpacity(0.02),
         ),
       ),
       child: Material(
@@ -906,26 +808,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
           borderRadius: BorderRadius.circular(16 * scale),
           onTap: () => _showEditBroadcastDialog(scale, broadcast),
           child: Padding(
-            padding: EdgeInsets.all(12 * scale),
+            padding: EdgeInsets.all(16 * scale),
             child: Row(
               children: [
+                // Minimal thumbnail
                 Container(
-                  width: 48 * scale,
-                  height: 48 * scale,
+                  width: 44 * scale,
+                  height: 44 * scale,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: isAudio 
-                        ? [const Color(0xFF4FACFE), const Color(0xFF00F2FE)]
-                        : [const Color(0xFFFA709A), const Color(0xFFFEE140)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(12 * scale),
+                    color: Colors.black38,
+                    borderRadius: BorderRadius.circular(10 * scale),
                   ),
                   child: Icon(
-                    isAudio ? Icons.headphones_rounded : Icons.play_arrow_rounded,
-                    color: Colors.white,
-                    size: 24 * scale,
+                    isAudio ? Icons.headphones : Icons.play_arrow,
+                    color: Colors.white70,
+                    size: 20 * scale,
                   ),
                 ),
                 SizedBox(width: 16 * scale),
@@ -935,8 +832,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     children: [
                       Text(
                         broadcast['title'] ?? 'Untitled',
-                        style: GoogleFonts.manrope(
-                          fontSize: 15 * scale,
+                        style: GoogleFonts.inter(
+                          fontSize: 14 * scale,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),
@@ -946,27 +843,24 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       SizedBox(height: 4 * scale),
                       Row(
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6 * scale, vertical: 2 * scale),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(4 * scale),
-                            ),
-                            child: Text(
-                              (broadcast['category'] ?? 'New').toString().toUpperCase(),
-                              style: GoogleFonts.manrope(
-                                fontSize: 9 * scale,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white70,
-                              ),
+                          Text(
+                            (broadcast['category'] ?? 'New').toString().toUpperCase(),
+                            style: GoogleFonts.inter(
+                              fontSize: 10 * scale,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF2196F3),
+                              letterSpacing: 0.5,
                             ),
                           ),
-                          SizedBox(width: 8 * scale),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 6 * scale),
+                            child: Icon(Icons.circle, size: 3 * scale, color: Colors.white24),
+                          ),
                           Text(
                             broadcast['date'] ?? 'No date',
-                            style: GoogleFonts.manrope(
+                            style: GoogleFonts.inter(
                               fontSize: 11 * scale,
-                              color: Colors.white.withOpacity(0.4),
+                              color: Colors.white38,
                             ),
                           ),
                         ],
@@ -974,13 +868,26 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     ],
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.edit_rounded, color: Colors.white70, size: 20 * scale),
-                  onPressed: () => _showEditBroadcastDialog(scale, broadcast),
-                ),
-                IconButton(
-                  icon: Icon(Icons.delete_outline_rounded, color: Colors.red.withOpacity(0.7), size: 20 * scale),
-                  onPressed: () => _confirmDelete(broadcast['id']),
+                // Minimal action icons
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit_outlined, color: Colors.white38, size: 20 * scale),
+                      onPressed: () => _showEditBroadcastDialog(scale, broadcast),
+                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(),
+                      padding: const EdgeInsets.all(8),
+                    ),
+                    SizedBox(width: 8 * scale),
+                    IconButton(
+                      icon: Icon(Icons.delete_outline, color: Colors.redAccent.withOpacity(0.7), size: 20 * scale),
+                      onPressed: () => _confirmDelete(broadcast['id']),
+                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(),
+                      padding: const EdgeInsets.all(8),
+                    ),
+                  ],
                 ),
               ],
             ),
