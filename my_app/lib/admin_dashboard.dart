@@ -38,6 +38,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
   PlatformFile? _selectedCoverFile;
   PlatformFile? _selectedHeroFile;
   PlatformFile? _selectedLogoFile;
+  PlatformFile? _selectedProfileFile;
+  String? _profileImageUrl;
 
   @override
   void initState() {
@@ -76,6 +78,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     });
 
     await _loadBroadcasts();
+    await _fetchProfile();
   }
 
   Future<void> _loadBroadcasts() async {
@@ -110,6 +113,26 @@ class _AdminDashboardState extends State<AdminDashboard> {
         _isLoading = false;
       });
       debugPrint('Load error: $e');
+    }
+  }
+
+  Future<void> _fetchProfile() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/user'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _profileImageUrl = data['avatarUrl'];
+        });
+      }
+    } catch (e) {
+      debugPrint('Fetch profile error: $e');
     }
   }
 
@@ -157,6 +180,18 @@ class _AdminDashboardState extends State<AdminDashboard> {
     if (result != null) {
       setState(() {
         _selectedLogoFile = result.files.first;
+      });
+    }
+  }
+
+  Future<void> _pickProfileFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedProfileFile = result.files.first;
       });
     }
   }
@@ -378,6 +413,46 @@ class _AdminDashboardState extends State<AdminDashboard> {
     }
   }
 
+  Future<void> _updateProfilePicture() async {
+    if (_selectedProfileFile == null) {
+      _showSnackBar('Please select a profile image', isError: true);
+      return;
+    }
+
+    try {
+      var request = http.MultipartRequest('PUT', Uri.parse('$_baseUrl/user/avatar'));
+      request.headers['Authorization'] = 'Bearer $_token';
+
+      if (_selectedProfileFile!.path != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'avatar',
+          _selectedProfileFile!.path!,
+          contentType: MediaType('image', 'jpeg'),
+        ));
+      }
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+      
+      if (response.statusCode == 200) {
+        _showSnackBar('Profile picture updated successfully!');
+        final data = jsonDecode(response.body);
+         setState(() {
+             if (data['adminProfile'] != null && data['adminProfile']['avatarUrl'] != null) {
+                 _profileImageUrl = data['adminProfile']['avatarUrl'];
+             }
+         });
+        _clearForm();
+        if (mounted) Navigator.pop(context);
+      } else {
+        _showSnackBar('Failed to update profile picture', isError: true);
+      }
+    } catch (e) {
+      _showSnackBar('Connection error', isError: true);
+      debugPrint('Update profile error: $e');
+    }
+  }
+
   void _clearForm() {
     _titleController.clear();
     _youtubeUrlController.clear();
@@ -390,6 +465,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       _selectedCoverFile = null;
       _selectedHeroFile = null;
       _selectedLogoFile = null;
+      _selectedProfileFile = null;
     });
   }
 
@@ -532,14 +608,19 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       child: CircleAvatar(
                         radius: 12 * scale,
                         backgroundColor: Colors.grey[800],
-                        child: Text(
-                          _username?.substring(0, 1).toUpperCase() ?? 'A',
-                          style: GoogleFonts.manrope(
-                            fontSize: 12 * scale, 
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold
-                          ),
-                        ),
+                        backgroundImage: _profileImageUrl != null && _profileImageUrl!.isNotEmpty
+                            ? NetworkImage(_profileImageUrl!)
+                            : null,
+                        child: (_profileImageUrl == null || _profileImageUrl!.isEmpty)
+                            ? Text(
+                                _username?.substring(0, 1).toUpperCase() ?? 'A',
+                                style: GoogleFonts.manrope(
+                                  fontSize: 12 * scale, 
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                     SizedBox(width: 8 * scale),
@@ -767,6 +848,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 () => _showUpdateLogoDialog(scale),
               ),
             ),
+          ],
+        ),
+        SizedBox(height: 12 * scale),
+        Row(
+          children: [
+            Expanded(
+              child: _buildActionTile(
+                scale,
+                'Change Profile',
+                Icons.account_circle_outlined,
+                () => _showUpdateProfileDialog(scale),
+              ),
+            ),
+             Expanded(child: SizedBox()), // Placeholder
           ],
         ),
       ],
@@ -1253,6 +1348,50 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
               TextButton(
                 onPressed: _updateLogo,
+                child: const Text('Update'),
+              ),
+            ],
+          );
+        }
+      ),
+    );
+  }
+
+  void _showUpdateProfileDialog(double scale) {
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            backgroundColor: const Color(0xFF1A1A1A),
+            title: Text(
+              'Update Profile Picture',
+              style: GoogleFonts.manrope(color: Colors.white),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 16 * scale),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      await _pickProfileFile();
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.image),
+                    label: Text(_selectedProfileFile?.name ?? 'Select Image'),
+                  ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  _clearForm();
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: _updateProfilePicture,
                 child: const Text('Update'),
               ),
             ],

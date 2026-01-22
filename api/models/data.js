@@ -8,6 +8,10 @@ const logo = {
     url: '' // Default empty or a placeholder
 };
 
+const adminProfile = {
+    avatarUrl: ''
+};
+
 const broadcasts = [
     {
         id: 1,
@@ -47,5 +51,6 @@ const broadcasts = [
 module.exports = {
     heroBackground,
     logo,
+    adminProfile,
     broadcasts
 };

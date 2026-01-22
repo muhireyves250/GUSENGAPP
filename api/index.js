@@ -26,6 +26,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/user', require('./routes/user.routes'));
 app.use('/api/broadcasts', broadcastRoutes);
 app.use('/api/home', homeRoutes);
 app.use('/api', homeRoutes); // For /api/search
