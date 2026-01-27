@@ -1,12 +1,53 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'models/broadcast_model.dart';
 import 'navigation_bar.dart';
 
-class DownloadPage extends StatelessWidget {
+class DownloadPage extends StatefulWidget {
   const DownloadPage({super.key, bool? hideNavigationBar}) 
       : hideNavigationBar = hideNavigationBar ?? false;
   
   final bool hideNavigationBar;
+
+  @override
+  State<DownloadPage> createState() => _DownloadPageState();
+}
+
+class _DownloadPageState extends State<DownloadPage> {
+  List<Broadcast> _archives = [];
+  bool _isLoading = true;
+  final String _baseUrl = 'http://10.0.2.2:5000/api';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchArchives();
+  }
+
+  Future<void> _fetchArchives() async {
+    setState(() => _isLoading = true);
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/broadcasts'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            _archives = data.map((e) => Broadcast.fromJson(e)).toList();
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('Error fetching archives: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +120,9 @@ class DownloadPage extends StatelessWidget {
                     top: 50 * scale + 22 * scale + 16 * scale, // Below fixed text
                     right: 0,
                     bottom: 89 * finalScale + 20 * finalScale, // Space for bottom nav
-                    child: SingleChildScrollView(
+                    child: _isLoading 
+                      ? Center(child: CircularProgressIndicator(color: Colors.white54))
+                      : SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -92,184 +135,22 @@ class DownloadPage extends StatelessWidget {
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/83b21d14-3cbc-47f3-a740-e8a2d2c6e81b',
-                                  title: 'Yesu aragukunda',
-                                  date: '26 March 2023',
-                                  time: '06:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/a59cdbd8-3f70-49be-91cb-5ba96ee8745f',
-                                  title: 'Imana ni nyembabazi',
-                                  date: '28 October 2025',
-                                  time: '10:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/73ac629c-21e2-4d3f-a0d8-563499aad246',
-                                  title: 'Ubuzima bushingiye kumana',
-                                  date: '2 November 2025',
-                                  time: '11:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-                                  title: 'Imbaraga zimana zishobora byose',
-                                  date: '8 December 2024',
-                                  time: '19:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: true,
-                                  middleGradientColor: const Color(0xFF999999),
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/83b21d14-3cbc-47f3-a740-e8a2d2c6e81b',
-                                  title: 'Ruhuka umutima',
-                                  date: '28 October 2025',
-                                  time: '1:55',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/a59cdbd8-3f70-49be-91cb-5ba96ee8745f',
-                                  title: 'Ubwoba bwose buraguka',
-                                  date: '15 January 2024',
-                                  time: '14:30',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/73ac629c-21e2-4d3f-a0d8-563499aad246',
-                                  title: 'Umutima wanjye wuzuye',
-                                  date: '22 February 2024',
-                                  time: '08:15',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-                                  title: 'Nta wundi nkunda',
-                                  date: '5 April 2024',
-                                  time: '16:45',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/83b21d14-3cbc-47f3-a740-e8a2d2c6e81b',
-                                  title: 'Imana yanjye ni nyirubwoba',
-                                  date: '12 May 2024',
-                                  time: '09:20',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/a59cdbd8-3f70-49be-91cb-5ba96ee8745f',
-                                  title: 'Nta wundi wampundura',
-                                  date: '30 June 2024',
-                                  time: '13:10',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/73ac629c-21e2-4d3f-a0d8-563499aad246',
-                                  title: 'Yesu ni we Mwami',
-                                  date: '10 July 2024',
-                                  time: '15:30',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-                                  title: 'Nta wundi wampundura',
-                                  date: '18 August 2024',
-                                  time: '12:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/83b21d14-3cbc-47f3-a740-e8a2d2c6e81b',
-                                  title: 'Imana ni nyirubwoba',
-                                  date: '25 September 2024',
-                                  time: '17:45',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/a59cdbd8-3f70-49be-91cb-5ba96ee8745f',
-                                  title: 'Umutima wanjye wuzuye',
-                                  date: '3 October 2024',
-                                  time: '11:20',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/73ac629c-21e2-4d3f-a0d8-563499aad246',
-                                  title: 'Ubwoba bwose buraguka',
-                                  date: '14 November 2024',
-                                  time: '09:15',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  isDownloadingInitial: false,
-                                ),
-                                SizedBox(height: 12 * scale),
-                                DownloadItemWidget(
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-                                  title: 'Imana ni nyembabazi',
-                                  date: '22 December 2024',
-                                  time: '14:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  isDownloadingInitial: false,
-                                ),
-                              ],
+                              children: _archives.map((item) {
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 12 * scale),
+                                  child: DownloadItemWidget(
+                                    scale: finalScale,
+                                    itemWidth: contentWidth,
+                                    thumbnailUrl: item.thumbnail,
+                                    title: item.title,
+                                    date: item.date,
+                                    time: item.time,
+                                    dotUrl: '', // Or valid asset URL if needed
+                                    isDownloadingInitial: false,
+                                    moreUrl: item.audioUrl,
+                                  ),
+                                );
+                              }).toList(),
                             ),
                           ),
                         ],
@@ -278,7 +159,7 @@ class DownloadPage extends StatelessWidget {
                   ),
                   
                   // Bottom Navigation Bar
-                  if (!hideNavigationBar)
+                  if (!widget.hideNavigationBar)
                   Positioned(
                     left: 61 * scale,
                     bottom: 20 * scale,
@@ -311,6 +192,7 @@ class DownloadItemWidget extends StatefulWidget {
   final String dotUrl;
   final bool isDownloadingInitial;
   final Color? middleGradientColor;
+  final String? moreUrl;
 
   const DownloadItemWidget({
     super.key,
@@ -323,6 +205,7 @@ class DownloadItemWidget extends StatefulWidget {
     required this.dotUrl,
     required this.isDownloadingInitial,
     this.middleGradientColor,
+    this.moreUrl,
   });
 
   @override
@@ -481,10 +364,52 @@ class _DownloadItemWidgetState extends State<DownloadItemWidget> {
             ),
             SizedBox(width: 5 * widget.scale),
             // More button (vertical)
-            Icon(
-              Icons.more_vert,
-              color: Colors.white.withValues(alpha: 0.7),
-              size: 24 * widget.scale,
+            PopupMenuButton<String>(
+              icon: Icon(
+                Icons.more_vert,
+                color: Colors.white.withValues(alpha: 0.7),
+                size: 24 * widget.scale,
+              ),
+              color: const Color(0xFF1A1A1A),
+              onSelected: (value) async {
+                final urlToUse = widget.moreUrl ?? 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc'; // Fallback URL
+                if (value == 'share') {
+                  await Share.share('Check out this broadcast: ${widget.title}\n$urlToUse');
+                } else if (value == 'download') {
+                  final Uri url = Uri.parse(urlToUse);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Could not launch download link')),
+                      );
+                    }
+                  }
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                PopupMenuItem<String>(
+                  value: 'share',
+                  child: Row(
+                    children: [
+                      Icon(Icons.share, color: Colors.white70, size: 20 * widget.scale),
+                      SizedBox(width: 12 * widget.scale),
+                      Text('Share', style: GoogleFonts.manrope(color: Colors.white)),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<String>(
+                  value: 'download',
+                  child: Row(
+                    children: [
+                      Icon(Icons.download, color: Colors.white70, size: 20 * widget.scale),
+                      SizedBox(width: 12 * widget.scale),
+                      Text('Download', style: GoogleFonts.manrope(color: Colors.white)),
+                    ],
+                  ),
+                ),
+              ],
             ),
             SizedBox(width: 10 * widget.scale),
           ],

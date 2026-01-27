@@ -47,20 +47,20 @@
 34    </queries>
 35
 36    <permission
-36-->[androidx.core:core:1.15.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\0a69220afb472c7b014f0ae28962f998\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
+36-->[androidx.core:core:1.16.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\cd3730e7253acbb99e12cbb56ff11dc9\transformed\core-1.16.0\AndroidManifest.xml:22:5-24:47
 37        android:name="com.example.my_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-37-->[androidx.core:core:1.15.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\0a69220afb472c7b014f0ae28962f998\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
+37-->[androidx.core:core:1.16.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\cd3730e7253acbb99e12cbb56ff11dc9\transformed\core-1.16.0\AndroidManifest.xml:23:9-81
 38        android:protectionLevel="signature" />
-38-->[androidx.core:core:1.15.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\0a69220afb472c7b014f0ae28962f998\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
+38-->[androidx.core:core:1.16.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\cd3730e7253acbb99e12cbb56ff11dc9\transformed\core-1.16.0\AndroidManifest.xml:24:9-44
 39
 40    <uses-permission android:name="com.example.my_app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-40-->[androidx.core:core:1.15.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\0a69220afb472c7b014f0ae28962f998\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
-40-->[androidx.core:core:1.15.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\0a69220afb472c7b014f0ae28962f998\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
+40-->[androidx.core:core:1.16.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\cd3730e7253acbb99e12cbb56ff11dc9\transformed\core-1.16.0\AndroidManifest.xml:26:5-97
+40-->[androidx.core:core:1.16.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\cd3730e7253acbb99e12cbb56ff11dc9\transformed\core-1.16.0\AndroidManifest.xml:26:22-94
 41
 42    <application
 43        android:name="android.app.Application"
 44        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-44-->[androidx.core:core:1.15.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\0a69220afb472c7b014f0ae28962f998\transformed\core-1.15.0\AndroidManifest.xml:28:18-86
+44-->[androidx.core:core:1.16.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\cd3730e7253acbb99e12cbb56ff11dc9\transformed\core-1.16.0\AndroidManifest.xml:28:18-86
 45        android:debuggable="true"
 46        android:extractNativeLibs="true"
 47        android:icon="@mipmap/ic_launcher"
@@ -98,79 +98,126 @@
 79        <meta-data
 80            android:name="flutterEmbedding"
 81            android:value="2" />
-82
-83        <provider
-83-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\9a58102024d2bac5d1ee1e1203812678\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:24:9-32:20
-84            android:name="androidx.startup.InitializationProvider"
-84-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\9a58102024d2bac5d1ee1e1203812678\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:25:13-67
-85            android:authorities="com.example.my_app.androidx-startup"
-85-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\9a58102024d2bac5d1ee1e1203812678\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:26:13-68
-86            android:exported="false" >
-86-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\9a58102024d2bac5d1ee1e1203812678\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:27:13-37
-87            <meta-data
-87-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\9a58102024d2bac5d1ee1e1203812678\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
-88                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-88-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\9a58102024d2bac5d1ee1e1203812678\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
-89                android:value="androidx.startup" />
-89-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\9a58102024d2bac5d1ee1e1203812678\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
-90            <meta-data
-90-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-91                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-91-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
-92                android:value="androidx.startup" />
-92-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-93        </provider>
-94
-95        <uses-library
-95-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
-96            android:name="androidx.window.extensions"
-96-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
-97            android:required="false" />
-97-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
-98        <uses-library
-98-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
-99            android:name="androidx.window.sidecar"
-99-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
-100            android:required="false" />
-100-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
-101
-102        <receiver
-102-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-103            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-104            android:directBootAware="false"
-104-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-105            android:enabled="true"
-105-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-106            android:exported="true"
-106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-107            android:permission="android.permission.DUMP" >
-107-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-108            <intent-filter>
-108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-109                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-110            </intent-filter>
-111            <intent-filter>
-111-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-112                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-112-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
-113            </intent-filter>
-114            <intent-filter>
-114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-115                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
-116            </intent-filter>
-117            <intent-filter>
-117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-118                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\5f7dcf6815bacc3ae7f099ba801348de\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
-119            </intent-filter>
-120        </receiver>
-121    </application>
-122
-123</manifest>
+82        <!--
+83           Declares a provider which allows us to store files to share in
+84           '.../caches/share_plus' and grant the receiving action access
+85        -->
+86        <provider
+86-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:13:9-21:20
+87            android:name="dev.fluttercommunity.plus.share.ShareFileProvider"
+87-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:14:13-77
+88            android:authorities="com.example.my_app.flutter.share_provider"
+88-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:15:13-74
+89            android:exported="false"
+89-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:16:13-37
+90            android:grantUriPermissions="true" >
+90-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:17:13-47
+91            <meta-data
+91-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:18:13-20:68
+92                android:name="android.support.FILE_PROVIDER_PATHS"
+92-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:19:17-67
+93                android:resource="@xml/flutter_share_file_paths" />
+93-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:20:17-65
+94        </provider>
+95        <!--
+96           This manifest declared broadcast receiver allows us to use an explicit
+97           Intent when creating a PendingItent to be informed of the user's choice
+98        -->
+99        <receiver
+99-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:26:9-32:20
+100            android:name="dev.fluttercommunity.plus.share.SharePlusPendingIntent"
+100-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:27:13-82
+101            android:exported="false" >
+101-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:28:13-37
+102            <intent-filter>
+102-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:29:13-31:29
+103                <action android:name="EXTRA_CHOSEN_COMPONENT" />
+103-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:30:17-65
+103-->[:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:30:25-62
+104            </intent-filter>
+105        </receiver>
+106
+107        <activity
+107-->[:url_launcher_android] D:\GUSENGA-APP\my_app\build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:8:9-11:74
+108            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+108-->[:url_launcher_android] D:\GUSENGA-APP\my_app\build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:13-74
+109            android:exported="false"
+109-->[:url_launcher_android] D:\GUSENGA-APP\my_app\build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-37
+110            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+110-->[:url_launcher_android] D:\GUSENGA-APP\my_app\build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-71
+111
+112        <uses-library
+112-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\eaf3c33b1c2c22b1781558d0ca2e0eca\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+113            android:name="androidx.window.extensions"
+113-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\eaf3c33b1c2c22b1781558d0ca2e0eca\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+114            android:required="false" />
+114-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\eaf3c33b1c2c22b1781558d0ca2e0eca\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+115        <uses-library
+115-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\eaf3c33b1c2c22b1781558d0ca2e0eca\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+116            android:name="androidx.window.sidecar"
+116-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\eaf3c33b1c2c22b1781558d0ca2e0eca\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+117            android:required="false" />
+117-->[androidx.window:window:1.2.0] C:\Users\muhir\.gradle\caches\8.10.2\transforms\eaf3c33b1c2c22b1781558d0ca2e0eca\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+118
+119        <provider
+119-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\dc62775f87132388ab0e0f721f475415\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:24:9-32:20
+120            android:name="androidx.startup.InitializationProvider"
+120-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\dc62775f87132388ab0e0f721f475415\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:25:13-67
+121            android:authorities="com.example.my_app.androidx-startup"
+121-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\dc62775f87132388ab0e0f721f475415\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:26:13-68
+122            android:exported="false" >
+122-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\dc62775f87132388ab0e0f721f475415\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:27:13-37
+123            <meta-data
+123-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\dc62775f87132388ab0e0f721f475415\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
+124                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+124-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\dc62775f87132388ab0e0f721f475415\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
+125                android:value="androidx.startup" />
+125-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\muhir\.gradle\caches\8.10.2\transforms\dc62775f87132388ab0e0f721f475415\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
+126            <meta-data
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+127                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+128                android:value="androidx.startup" />
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+129        </provider>
+130
+131        <receiver
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+132            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+132-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+133            android:directBootAware="false"
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+134            android:enabled="true"
+134-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+135            android:exported="true"
+135-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+136            android:permission="android.permission.DUMP" >
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+137            <intent-filter>
+137-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+138                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+139            </intent-filter>
+140            <intent-filter>
+140-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+141                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+141-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+141-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+142            </intent-filter>
+143            <intent-filter>
+143-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+144                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+144-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+144-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+145            </intent-filter>
+146            <intent-filter>
+146-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+147                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+147-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+147-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\muhir\.gradle\caches\8.10.2\transforms\7109acf505a60c1bd0a5cc92a195927b\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+148            </intent-filter>
+149        </receiver>
+150    </application>
+151
+152</manifest>

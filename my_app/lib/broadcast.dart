@@ -1,13 +1,86 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'models/broadcast_model.dart';
 import 'navigation_bar.dart';
 import 'player.dart';
 
-class BroadcastPage extends StatelessWidget {
+class BroadcastPage extends StatefulWidget {
   const BroadcastPage({super.key, bool? hideNavigationBar}) 
       : hideNavigationBar = hideNavigationBar ?? false;
   
   final bool hideNavigationBar;
+
+  @override
+  State<BroadcastPage> createState() => _BroadcastPageState();
+}
+
+class _BroadcastPageState extends State<BroadcastPage> {
+  List<Broadcast> _latestVideos = [];
+  List<Broadcast> _topAudio = [];
+  bool _isLoading = true;
+  final String _baseUrl = 'http://10.0.2.2:5000/api';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    setState(() => _isLoading = true);
+    await Future.wait([
+      _fetchLatestVideos(),
+      _fetchTopAudio(),
+    ]);
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _fetchLatestVideos() async {
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/broadcasts?type=video'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            // Assuming data is chronological, take last 2 for latest
+            final List<Broadcast> allVideos = data.map((e) => Broadcast.fromJson(e)).toList();
+            _latestVideos = allVideos.length >= 2 
+                ? allVideos.reversed.take(2).toList() 
+                : allVideos.reversed.toList();
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('Error fetching latest videos: $e');
+    }
+  }
+
+  Future<void> _fetchTopAudio() async {
+    try {
+      // Fetching all audio first, then filtering for top if backend doesn't support combined query
+      // Or fetching top endpoint and filtering for audio
+      final response = await http.get(Uri.parse('$_baseUrl/broadcasts/top'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        if (mounted) {
+          setState(() {
+            _topAudio = data
+                .map((e) => Broadcast.fromJson(e))
+                .where((b) => b.type == 'audio')
+                .toList();
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('Error fetching top audio: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,171 +157,69 @@ class BroadcastPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // "Top broadcasts" section
+                          // "Top broadcasts" section (Videos)
                           Padding(
                             padding: EdgeInsets.only(
                               left: 36 * scale,
                               right: 36 * scale,
                               bottom: 20 * scale,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // First top broadcast card
-                                _buildTopBroadcastCard(
-                                  scale: finalScale,
-                                  width: contentWidth,
-                                  imageUrl: 'https://www.figma.com/api/mcp/asset/3e8a38c1-eaf4-4219-b2de-628cfc7d9d41',
-                                  title: 'Ruhuka umutima',
-                                  date: '28 October 2025',
-                                  time: '1:55',
+                            child: _isLoading 
+                              ? SizedBox(
+                                  height: 200 * scale,
+                                  child: Center(
+                                    child: CircularProgressIndicator(color: Colors.white54)
+                                  ),
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: _latestVideos.map((item) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: 16 * scale),
+                                      child: _buildVideoCard(
+                                        video: item,
+                                        scale: finalScale,
+                                        width: contentWidth,
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                                
-                                SizedBox(height: 16 * scale),
-                                
-                                // Second top broadcast card
-                                _buildTopBroadcastCard(
-                                  scale: finalScale,
-                                  width: contentWidth,
-                                  imageUrl: 'https://www.figma.com/api/mcp/asset/1c53fe15-c4d4-4c43-93e1-f0fde8a53e56',
-                                  title: 'Ruhuka umutima',
-                                  date: '28 October 2025',
-                                  time: '1:55',
-                                ),
-                              ],
-                            ),
                           ),
                           
-                          // General broadcast list
+                          // Top Audio list
                           Padding(
                             padding: EdgeInsets.only(
                               left: 36 * scale,
                               right: 36 * scale,
                               bottom: 20 * scale,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-                                  title: 'Imana ni nyembabazi ',
-                                  date: '28 October 2025',
-                                  time: '10:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/2e9b4857-7ba7-4ba4-84ff-de5c0c37307e',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc',
+                            child: _isLoading 
+                              ? SizedBox(
+                                  height: 200 * scale,
+                                  child: Center(
+                                    child: CircularProgressIndicator(color: Colors.white54)
+                                  ),
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: _topAudio.map((item) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: 12 * scale),
+                                      child: _buildAudioItem(
+                                        context: context,
+                                        scale: finalScale,
+                                        itemWidth: contentWidth,
+                                        thumbnailUrl: item.thumbnail,
+                                        title: item.title,
+                                        date: item.date,
+                                        time: item.time,
+                                        dotUrl: '', 
+                                        playUrl: '',
+                                        moreUrl: item.audioUrl ?? '',
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/73ac629c-21e2-4d3f-a0d8-563499aad246',
-                                  title: 'Ubuzima bushingiye kumana',
-                                  date: '2 November 2025',
-                                  time: '11:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/cad4a698-ea2d-4a2d-a7c4-272db5eb1f5c',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc',
-                                ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/a59cdbd8-3f70-49be-91cb-5ba96ee8745f',
-                                  title: 'Imbaraga zimana zishobora byose',
-                                  date: '8 December 2024',
-                                  time: '19:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/2e9b4857-7ba7-4ba4-84ff-de5c0c37307e',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc',
-                                  middleGradientColor: const Color(0xFF999999),
-                                ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/83b21d14-3cbc-47f3-a740-e8a2d2c6e81b',
-                                  title: 'Yesu aragukunda ',
-                                  date: '26 March 2023',
-                                  time: '06:00',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/5e3bb5f2-2502-4618-ab77-1f96f0f7c952',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/8a527eb2-4ead-47e8-bd31-6b8f5895c965',
-                                ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-                                  title: 'Ubwoba bwose buraguka',
-                                  date: '15 January 2024',
-                                  time: '14:30',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/2e9b4857-7ba7-4ba4-84ff-de5c0c37307e',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc',
-                                ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/73ac629c-21e2-4d3f-a0d8-563499aad246',
-                                  title: 'Umutima wanjye wuzuye',
-                                  date: '22 February 2024',
-                                  time: '08:15',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/cad4a698-ea2d-4a2d-a7c4-272db5eb1f5c',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc',
-                                ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/a59cdbd8-3f70-49be-91cb-5ba96ee8745f',
-                                  title: 'Nta wundi nkunda',
-                                  date: '5 April 2024',
-                                  time: '16:45',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/2e9b4857-7ba7-4ba4-84ff-de5c0c37307e',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc',
-                                  middleGradientColor: const Color(0xFF999999),
-                                ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/83b21d14-3cbc-47f3-a740-e8a2d2c6e81b',
-                                  title: 'Imana yanjye ni nyirubwoba',
-                                  date: '12 May 2024',
-                                  time: '09:20',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/5f0dc6be-eee3-4423-9dee-515641413da5',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/5e3bb5f2-2502-4618-ab77-1f96f0f7c952',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/8a527eb2-4ead-47e8-bd31-6b8f5895c965',
-                                ),
-                                SizedBox(height: 12 * scale),
-                                _buildAudioItem(
-                                  context: context,
-                                  scale: finalScale,
-                                  itemWidth: contentWidth,
-                                  thumbnailUrl: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-                                  title: 'Nta wundi wampundura',
-                                  date: '30 June 2024',
-                                  time: '13:10',
-                                  dotUrl: 'https://www.figma.com/api/mcp/asset/195c91c8-1f87-4eda-85d5-422927a39565',
-                                  playUrl: 'https://www.figma.com/api/mcp/asset/2e9b4857-7ba7-4ba4-84ff-de5c0c37307e',
-                                  moreUrl: 'https://www.figma.com/api/mcp/asset/4f384859-7347-49a9-8ff8-464cbd16b1fc',
-                                ),
-                              ],
-                            ),
                           ),
                         ],
                       ),
@@ -256,7 +227,7 @@ class BroadcastPage extends StatelessWidget {
                   ),
                   
                   // Bottom Navigation Bar (same as home page)
-                  if (!hideNavigationBar)
+                  if (!widget.hideNavigationBar)
                   Positioned(
                     left: 61 * scale,
                     bottom: 20 * scale,
@@ -278,13 +249,10 @@ class BroadcastPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTopBroadcastCard({
+  Widget _buildVideoCard({
+    required Broadcast video,
     required double scale,
     required double width,
-    required String imageUrl,
-    required String title,
-    required String date,
-    required String time,
   }) {
     return SizedBox(
       width: width,
@@ -292,26 +260,43 @@ class BroadcastPage extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20 * scale),
-            child: Image.network(
-              imageUrl,
-              width: width,
-              height: 177 * scale,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  width: width,
-                  height: 177 * scale,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xFF48BB78),
-                        const Color(0xFF38A169),
-                      ],
+            child: video.thumbnail.isNotEmpty
+                ? Image.network(
+                    video.thumbnail,
+                    width: width,
+                    height: 177 * scale,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: width,
+                      height: 177 * scale,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xFF48BB78),
+                            const Color(0xFF38A169),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Icon(Icons.video_library, color: Colors.white54, size: 50 * scale),
+                      ),
+                    ),
+                  )
+                : Container(
+                    width: width,
+                    height: 177 * scale,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF48BB78),
+                          const Color(0xFF38A169),
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(Icons.video_library, color: Colors.white54, size: 50 * scale),
                     ),
                   ),
-                );
-              },
-            ),
           ),
           
           // Overlay info card background
@@ -321,30 +306,22 @@ class BroadcastPage extends StatelessWidget {
             right: 0,
             child: Stack(
               children: [
-                Image.network(
-                  'https://www.figma.com/api/mcp/asset/3112a66f-ab6a-4562-99df-528389b7d031',
-                  width: width,
+                Container(
                   height: 57 * scale,
-                  fit: BoxFit.fill,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      height: 57 * scale,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20 * scale),
-                          bottomRight: Radius.circular(20 * scale),
-                        ),
-                      ),
-                    );
-                  },
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20 * scale),
+                      bottomRight: Radius.circular(20 * scale),
+                    ),
+                  ),
                 ),
                 // Rectangle 6 overlay color D9D9D9 30%
                 Container(
                   width: width,
                   height: 57 * scale,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFD9D9D9).withOpacity(0.3),
+                    color: const Color(0xFFD9D9D9).withValues(alpha: 0.3),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20 * scale),
                       bottomRight: Radius.circular(20 * scale),
@@ -380,31 +357,26 @@ class BroadcastPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            title,
+                            video.title,
                             style: GoogleFonts.manrope(
                               fontSize: 16 * scale,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 4 * scale),
                           Row(
                             children: [
-                              Image.network(
-                                'https://www.figma.com/api/mcp/asset/49f628a0-fcd9-4941-99ee-cc68ca452629',
-                                width: 15 * scale,
-                                height: 15 * scale,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Icon(
-                                    Icons.calendar_today,
-                                    size: 12 * scale,
-                                    color: const Color(0xFFD1D1D1),
-                                  );
-                                },
+                              Icon(
+                                Icons.calendar_today,
+                                size: 12 * scale,
+                                color: const Color(0xFFD1D1D1),
                               ),
                               SizedBox(width: 4 * scale),
                               Text(
-                                date,
+                                video.date,
                                 style: GoogleFonts.manrope(
                                   fontSize: 13 * scale,
                                   fontWeight: FontWeight.normal,
@@ -412,21 +384,14 @@ class BroadcastPage extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: 8 * scale),
-                              Image.network(
-                                'https://www.figma.com/api/mcp/asset/9d12510d-02bb-45a5-9d54-838b92374d2f',
-                                width: 13 * scale,
-                                height: 12 * scale,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Icon(
-                                    Icons.access_time,
-                                    size: 12 * scale,
-                                    color: const Color(0xFFD1D1D1),
-                                  );
-                                },
+                              Icon(
+                                Icons.access_time,
+                                size: 12 * scale,
+                                color: const Color(0xFFD1D1D1),
                               ),
                               SizedBox(width: 4 * scale),
                               Text(
-                                time,
+                                video.time,
                                 style: GoogleFonts.manrope(
                                   fontSize: 13 * scale,
                                   fontWeight: FontWeight.normal,
@@ -438,25 +403,33 @@ class BroadcastPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Image.network(
-                      'https://www.figma.com/api/mcp/asset/06e4f4bb-f9e8-4c7a-9b91-61de968fed9e',
-                      width: 30 * scale,
-                      height: 30 * scale,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 30 * scale,
-                          height: 30 * scale,
-                          decoration: const BoxDecoration(
-                            color: Colors.teal,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.play_arrow,
-                            color: Colors.white,
-                            size: 20 * scale,
-                          ),
-                        );
+                    GestureDetector(
+                      onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PlayerPage(
+                                title: video.title,
+                                date: video.date,
+                                time: video.time,
+                                thumbnailUrl: video.thumbnail,
+                              ),
+                            ),
+                          );
                       },
+                      child: Container(
+                        width: 30 * scale,
+                        height: 30 * scale,
+                        decoration: const BoxDecoration(
+                          color: Colors.teal,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.play_arrow,
+                          color: Colors.white,
+                          size: 20 * scale,
+                        ),
+                      ),
                     ),
                     SizedBox(width: 10 * scale),
                   ],
@@ -618,18 +591,52 @@ class BroadcastPage extends StatelessWidget {
             ),
             SizedBox(width: 5 * scale),
             // More button (vertical)
-            Image.network(
-              moreUrl,
-              width: 35 * scale,
-              height: 35 * scale,
-              errorBuilder: (context, error, stackTrace) {
-                return Icon(
-                  Icons.more_vert,
-                  color: Colors.white,
-                  size: 24 * scale,
-                );
-              },
+          PopupMenuButton<String>(
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.white,
+              size: 24 * scale,
             ),
+            color: const Color(0xFF1A1A1A),
+            onSelected: (value) async {
+              if (value == 'share') {
+                await Share.share('Check out this broadcast: $title\n$moreUrl');
+              } else if (value == 'download') {
+                final Uri url = Uri.parse(moreUrl);
+                if (await canLaunchUrl(url)) {
+                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                } else {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Could not launch download link')),
+                    );
+                  }
+                }
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'share',
+                child: Row(
+                  children: [
+                    Icon(Icons.share, color: Colors.white70, size: 20 * scale),
+                    SizedBox(width: 12 * scale),
+                    Text('Share', style: GoogleFonts.manrope(color: Colors.white)),
+                  ],
+                ),
+              ),
+              PopupMenuItem<String>(
+                value: 'download',
+                child: Row(
+                  children: [
+                    Icon(Icons.download, color: Colors.white70, size: 20 * scale),
+                    SizedBox(width: 12 * scale),
+                    Text('Download', style: GoogleFonts.manrope(color: Colors.white)),
+                  ],
+                ),
+              ),
+            ],
+          ),
             SizedBox(width: 10 * scale),
           ],
         ),
