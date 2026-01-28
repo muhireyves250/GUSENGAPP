@@ -218,9 +218,9 @@ class _HomePageState extends State<HomePage> {
                                     width: 50,
                                     height: 50,
                                     color: Colors.grey[800],
-                                    child: item['thumbnail'] != null && item['thumbnail'].toString().isNotEmpty
+                                    child: item['coverPhoto'] != null && item['coverPhoto'].toString().isNotEmpty
                                         ? Image.network(
-                                            item['thumbnail'],
+                                            item['coverPhoto'],
                                             fit: BoxFit.cover,
                                             errorBuilder: (context, error, stackTrace) =>
                                                 const Icon(Icons.music_note, color: Colors.white54),
@@ -250,7 +250,8 @@ class _HomePageState extends State<HomePage> {
                                         title: item['title'] ?? 'Untitled',
                                         date: item['date'] ?? '',
                                         time: item['time'] ?? '',
-                                        thumbnailUrl: item['thumbnail'] ?? '',
+                                        thumbnailUrl: item['coverPhoto'] ?? '',
+                                        audioUrl: item['audioUrl'], // Pass nullable
                                       ),
                                     ),
                                   );
@@ -563,11 +564,11 @@ class _HomePageState extends State<HomePage> {
                         separatorBuilder: (context, index) => SizedBox(height: 12 * scale),
                         itemBuilder: (context, index) {
                           final item = _audioReleases[index];
-                          return _buildAudioItem(
+                      return _buildAudioItem(
                             context: context,
                             scale: finalScale,
                             itemWidth: videoSectionWidth,
-                            thumbnailUrl: item.thumbnail,
+                            thumbnailUrl: item.coverPhoto,
                             title: item.title,
                             date: item.date,
                             time: item.time,
@@ -612,9 +613,9 @@ class _HomePageState extends State<HomePage> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(20 * scale),
-          child: video.thumbnail.isNotEmpty
+          child: video.coverPhoto.isNotEmpty
               ? Image.network(
-                  video.thumbnail,
+                  video.coverPhoto,
                   width: width,
                   height: 177 * scale,
                   fit: BoxFit.cover,
@@ -757,7 +758,8 @@ class _HomePageState extends State<HomePage> {
                                 title: video.title,
                                 date: video.date,
                                 time: video.time,
-                                thumbnailUrl: video.thumbnail,
+                                thumbnailUrl: video.coverPhoto,
+                                audioUrl: video.audioUrl,
                               ),
                             ),
                           );
@@ -826,11 +828,21 @@ class _HomePageState extends State<HomePage> {
               width: 60 * scale,
               height: 53 * scale,
               color: Colors.grey[800],
-              child: Icon(
-                Icons.music_note,
-                color: Colors.white54,
-                size: 24 * scale,
-              ),
+              child: thumbnailUrl.isNotEmpty 
+                  ? Image.network(
+                      thumbnailUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.music_note,
+                        color: Colors.white54,
+                        size: 24 * scale,
+                      ),
+                    )
+                  : Icon(
+                      Icons.music_note,
+                      color: Colors.white54,
+                      size: 24 * scale,
+                    ),
             ),
           ),
           SizedBox(width: 13 * scale),
@@ -895,6 +907,7 @@ class _HomePageState extends State<HomePage> {
                     date: date,
                     time: time,
                     thumbnailUrl: thumbnailUrl,
+                    audioUrl: moreUrl,
                   ),
                 ),
               );

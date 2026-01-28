@@ -26,7 +26,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   // Form controllers
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _youtubeUrlController = TextEditingController();
-  final TextEditingController _thumbnailController = TextEditingController(); // For video thumbnail URL
+  // final TextEditingController _thumbnailController = TextEditingController(); // Removed
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _heroUrlController = TextEditingController();
   
@@ -51,7 +51,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   void dispose() {
     _titleController.dispose();
     _youtubeUrlController.dispose();
-    _thumbnailController.dispose();
+    // _thumbnailController.dispose();
     _descriptionController.dispose();
     _heroUrlController.dispose();
     super.dispose();
@@ -306,7 +306,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           'description': _descriptionController.text,
           'category': _selectedCategory,
           'youtubeUrl': _youtubeUrlController.text.isNotEmpty ? _youtubeUrlController.text : null,
-          'thumbnail': _thumbnailController.text.isNotEmpty ? _thumbnailController.text : null,
+          // 'thumbnail': _thumbnailController.text.isNotEmpty ? _thumbnailController.text : null, // Removed
         }),
       ).timeout(const Duration(seconds: 10));
 
@@ -456,7 +456,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   void _clearForm() {
     _titleController.clear();
     _youtubeUrlController.clear();
-    _thumbnailController.clear();
+    // _thumbnailController.clear();
     _descriptionController.clear();
     _heroUrlController.clear();
     setState(() {
@@ -1406,7 +1406,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     _titleController.text = broadcast['title'] ?? '';
     _descriptionController.text = broadcast['description'] ?? '';
     _youtubeUrlController.text = broadcast['youtubeUrl'] ?? '';
-    _thumbnailController.text = broadcast['thumbnail'] ?? '';
+    // _thumbnailController.text = broadcast['thumbnail'] ?? '';
     _selectedCategory = broadcast['category'] ?? 'new';
 
     showDialog(

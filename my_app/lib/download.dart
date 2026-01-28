@@ -141,7 +141,7 @@ class _DownloadPageState extends State<DownloadPage> {
                                   child: DownloadItemWidget(
                                     scale: finalScale,
                                     itemWidth: contentWidth,
-                                    thumbnailUrl: item.thumbnail,
+                                    thumbnailUrl: item.coverPhoto,
                                     title: item.title,
                                     date: item.date,
                                     time: item.time,

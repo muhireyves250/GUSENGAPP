@@ -209,7 +209,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
                                         context: context,
                                         scale: finalScale,
                                         itemWidth: contentWidth,
-                                        thumbnailUrl: item.thumbnail,
+                                        thumbnailUrl: item.coverPhoto,
                                         title: item.title,
                                         date: item.date,
                                         time: item.time,
@@ -260,9 +260,9 @@ class _BroadcastPageState extends State<BroadcastPage> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20 * scale),
-            child: video.thumbnail.isNotEmpty
+            child: video.coverPhoto.isNotEmpty
                 ? Image.network(
-                    video.thumbnail,
+                    video.coverPhoto,
                     width: width,
                     height: 177 * scale,
                     fit: BoxFit.cover,
@@ -412,7 +412,8 @@ class _BroadcastPageState extends State<BroadcastPage> {
                                 title: video.title,
                                 date: video.date,
                                 time: video.time,
-                                thumbnailUrl: video.thumbnail,
+                                thumbnailUrl: video.coverPhoto,
+                                audioUrl: video.audioUrl,
                               ),
                             ),
                           );
@@ -491,6 +492,11 @@ class _BroadcastPageState extends State<BroadcastPage> {
                       color: Colors.grey[800],
                       borderRadius: BorderRadius.circular(9 * scale),
                     ),
+                    child: Icon(
+                      Icons.music_note,
+                      color: Colors.white54,
+                      size: 24 * scale,
+                    ),
                   );
                 },
               ),
@@ -564,6 +570,7 @@ class _BroadcastPageState extends State<BroadcastPage> {
                       date: date,
                       time: time,
                       thumbnailUrl: thumbnailUrl,
+                      audioUrl: moreUrl, // Used moreUrl as audioUrl in builder
                     ),
                   ),
                 );

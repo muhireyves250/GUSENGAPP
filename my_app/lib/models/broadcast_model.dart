@@ -6,7 +6,7 @@ class Broadcast {
   final String category;
   final String? audioUrl;
   final String? youtubeUrl;
-  final String thumbnail;
+  final String coverPhoto;
   final String date;
   final String time;
 
@@ -18,7 +18,7 @@ class Broadcast {
     required this.category,
     this.audioUrl,
     this.youtubeUrl,
-    required this.thumbnail,
+    required this.coverPhoto,
     required this.date,
     required this.time,
   });
@@ -32,7 +32,7 @@ class Broadcast {
       category: json['category'] ?? 'new',
       audioUrl: json['audioUrl'],
       youtubeUrl: json['youtubeUrl'],
-      thumbnail: json['thumbnail'] ?? '',
+      coverPhoto: json['coverPhoto'] ?? '',
       date: json['date'] ?? '',
       time: json['time'] ?? '',
     );

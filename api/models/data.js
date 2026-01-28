@@ -5,7 +5,7 @@ const heroBackground = {
 };
 
 const logo = {
-    url: '' // Default empty or a placeholder
+    url: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9' // Placeholder Logo (Mountain/cross)
 };
 
 const adminProfile = {
@@ -21,7 +21,7 @@ const broadcasts = [
         time: '1:55',
         type: 'video',
         category: 'featured',
-        thumbnail: 'https://www.figma.com/api/mcp/asset/3e8a38c1-eaf4-4219-b2de-628cfc7d9d41',
+        coverPhoto: 'https://images.unsplash.com/photo-1507692049790-de58293a4697', // Real photo (Peaceful nature)
         youtubeUrl: 'https://www.youtube.com/watch?v=example1'
     },
     {
@@ -32,8 +32,8 @@ const broadcasts = [
         time: '10:00',
         type: 'audio',
         category: 'new',
-        thumbnail: 'https://www.figma.com/api/mcp/asset/de3fd8bb-4f80-4d80-98f2-d32ea8f55c0d',
-        youtubeUrl: 'https://www.youtube.com/watch?v=example2'
+        coverPhoto: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94', // Real photo (Praying/Bible)
+        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' // Placeholder audio
     },
     {
         id: 3,
@@ -43,8 +43,8 @@ const broadcasts = [
         time: '11:00',
         type: 'audio',
         category: 'new',
-        thumbnail: 'https://www.figma.com/api/mcp/asset/73ac629c-21e2-4d3f-a0d8-563499aad246',
-        youtubeUrl: 'https://www.youtube.com/watch?v=example3'
+        coverPhoto: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65', // Real photo (Cross/Sunset)
+        audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' // Placeholder audio
     }
 ];
 

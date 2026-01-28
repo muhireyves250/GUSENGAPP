@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class PlayerPage extends StatelessWidget {
+class PlayerPage extends StatefulWidget {
   final String? title;
   final String? date;
   final String? time;
   final String? thumbnailUrl;
+  final String? audioUrl;
 
   const PlayerPage({
     super.key,
@@ -13,7 +15,94 @@ class PlayerPage extends StatelessWidget {
     this.date,
     this.time,
     this.thumbnailUrl,
+    this.audioUrl,
   });
+
+  @override
+  State<PlayerPage> createState() => _PlayerPageState();
+}
+
+class _PlayerPageState extends State<PlayerPage> {
+  late AudioPlayer _audioPlayer;
+  bool _isPlaying = false;
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+  bool _isInit = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _audioPlayer = AudioPlayer();
+
+    // Listen to states
+    _audioPlayer.onPlayerStateChanged.listen((state) {
+        if (mounted) {
+            setState(() {
+                _isPlaying = state == PlayerState.playing;
+            });
+        }
+    });
+
+    // Listen to duration
+    _audioPlayer.onDurationChanged.listen((newDuration) {
+        if (mounted) {
+            setState(() {
+                _duration = newDuration;
+            });
+        }
+    });
+
+    // Listen to position
+    _audioPlayer.onPositionChanged.listen((newPosition) {
+        if (mounted) {
+            setState(() {
+                _position = newPosition;
+            });
+        }
+    });
+    
+    _initAudio();
+  }
+
+  Future<void> _initAudio() async {
+      if (widget.audioUrl != null && widget.audioUrl!.isNotEmpty) {
+          try {
+              // Replace localhost for Android emulator if needed, but ideally passed correctly from API
+               // If source is like 'http://localhost:5000/...', android emulator needs '10.0.2.2'
+               // But the API returns full URL. 
+               // If the API returns 'http://localhost:5000/uploads/...', we need to fix it here or in API.
+               // API logic: const serverUrl = `${req.protocol}://${req.get('host')}`;
+               // req.get('host') will be 'localhost:5000' or '10.0.2.2:5000' depending on who calls it?
+               // Actually if phone calls it via 10.0.2.2, host header is 10.0.2.2.
+               // So URL should be correct.
+               // For external URLs (SoundHelix), it's fine.
+              await _audioPlayer.setSourceUrl(widget.audioUrl!);
+              _isInit = true;
+          } catch (e) {
+              debugPrint("Error loading audio: $e");
+          }
+      }
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+  
+  String _formatDurationShort(Duration duration) {
+      String twoDigits(int n) => n.toString().padLeft(2, "0");
+      String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+      String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+      return "$twoDigitMinutes:$twoDigitSeconds";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +177,7 @@ class PlayerPage extends StatelessWidget {
               
               SizedBox(height: 20 * scale),
               
-              // Content container (constrained width like other pages)
+              // Content container
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -105,9 +194,9 @@ class PlayerPage extends StatelessWidget {
                       color: Colors.grey[800],
                       borderRadius: BorderRadius.circular(24 * scale),
                     ),
-                    child: thumbnailUrl != null
+                    child: widget.thumbnailUrl != null
                         ? Image.network(
-                            thumbnailUrl!,
+                            widget.thumbnailUrl!,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
@@ -172,7 +261,7 @@ class PlayerPage extends StatelessWidget {
                         SizedBox(
                           width: contentWidth,
                           child: Text(
-                            title ?? 'Imbaraga zimana zishobora byose',
+                            widget.title ?? 'Unknown Title',
                             style: GoogleFonts.manrope(
                               fontSize: 20 * scale,
                               fontWeight: FontWeight.bold,
@@ -186,7 +275,7 @@ class PlayerPage extends StatelessWidget {
                         
                         SizedBox(height: 32 * scale),
                         
-                        // Waveform and time
+                        // Slider and time
                         SizedBox(
                           width: contentWidth,
                           child: Column(
@@ -196,7 +285,7 @@ class PlayerPage extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '02:21',
+                                    _formatDurationShort(_position),
                                     style: GoogleFonts.manrope(
                                       fontSize: 12 * scale,
                                       fontWeight: FontWeight.w500,
@@ -204,7 +293,7 @@ class PlayerPage extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    '03:22',
+                                    _formatDurationShort(_duration),
                                     style: GoogleFonts.manrope(
                                       fontSize: 12 * scale,
                                       fontWeight: FontWeight.w500,
@@ -214,27 +303,25 @@ class PlayerPage extends StatelessWidget {
                                 ],
                               ),
                               SizedBox(height: 8 * scale),
-                              // Waveform visualization
-                              SizedBox(
-                                width: contentWidth,
-                                height: 40 * scale,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: List.generate(50, (index) {
-                                    final height = (20 + (index % 10) * 3) * scale;
-                                    final isPlayed = index < 25; // First half is played
-                                    return Container(
-                                      width: 3 * scale,
-                                      height: height,
-                                      decoration: BoxDecoration(
-                                        color: isPlayed 
-                                            ? const Color(0xFFFF6B35) // Orange for played
-                                            : Colors.white.withOpacity(0.3), // White for unplayed
-                                        borderRadius: BorderRadius.circular(1.5 * scale),
-                                      ),
-                                    );
-                                  }),
+                              
+                              // Slider (replacing static waveform for functionality)
+                              SliderTheme(
+                                data: SliderTheme.of(context).copyWith(
+                                    activeTrackColor: const Color(0xFFFF6B35),
+                                    inactiveTrackColor: Colors.white.withOpacity(0.3),
+                                    thumbColor: const Color(0xFFFF6B35),
+                                    trackHeight: 4 * scale,
+                                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6 * scale),
+                                ),
+                                child: Slider(
+                                    min: 0,
+                                    max: _duration.inSeconds.toDouble(),
+                                    value: _position.inSeconds.toDouble().clamp(0, _duration.inSeconds.toDouble()),
+                                    onChanged: (value) async {
+                                        final position = Duration(seconds: value.toInt());
+                                        await _audioPlayer.seek(position);
+                                        await _audioPlayer.resume(); // Auto play after seek
+                                    },
                                 ),
                               ),
                             ],
@@ -250,29 +337,35 @@ class PlayerPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Rewind 10s
-                    Container(
-                      width: 50 * scale,
-                      height: 50 * scale,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.transparent,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.replay_10,
-                            color: Colors.white,
-                            size: 24 * scale,
-                          ),
-                          Text(
-                            '10',
-                            style: TextStyle(
+                    GestureDetector(
+                      onTap: () {
+                          final newPos = _position - const Duration(seconds: 10);
+                          _audioPlayer.seek(newPos < Duration.zero ? Duration.zero : newPos);
+                      },
+                      child: Container(
+                        width: 50 * scale,
+                        height: 50 * scale,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.transparent,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.replay_10,
                               color: Colors.white,
-                              fontSize: 10 * scale,
+                              size: 24 * scale,
                             ),
-                          ),
-                        ],
+                            Text(
+                              '10',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10 * scale,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     
@@ -286,18 +379,32 @@ class PlayerPage extends StatelessWidget {
                       ),
                     ),
                     
-                    // Play button (large, prominent)
-                    Container(
-                      width: 70 * scale,
-                      height: 70 * scale,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFD1D1D1), // Light gray circle
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.play_arrow,
+                    // Play/Pause button (large, prominent)
+                    GestureDetector(
+                      onTap: () async {
+                          if (_isPlaying) {
+                              await _audioPlayer.pause();
+                          } else {
+                              if (_duration == Duration.zero && !_isInit) {
+                                  // Retry init or just play which might internally init
+                                  if (widget.audioUrl != null) {
+                                      await _audioPlayer.play(UrlSource(widget.audioUrl!));
+                                      _isInit = true;
+                                  }
+                              } else {
+                                  await _audioPlayer.resume();
+                              }
+                          }
+                      },
+                      child: Container(
+                        width: 70 * scale,
+                        height: 70 * scale,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFFD1D1D1), // Light gray circle
+                        ),
+                        child: Icon(
+                          _isPlaying ? Icons.pause : Icons.play_arrow,
                           color: Colors.black,
                           size: 36 * scale,
                         ),
@@ -315,7 +422,12 @@ class PlayerPage extends StatelessWidget {
                     ),
                     
                     // Fast-forward 10s
-                    Container(
+                    GestureDetector(
+                         onTap: () {
+                          final newPos = _position + const Duration(seconds: 10);
+                          _audioPlayer.seek(newPos > _duration ? _duration : newPos);
+                      },
+                      child: Container(
                       width: 50 * scale,
                       height: 50 * scale,
                       decoration: BoxDecoration(
@@ -340,6 +452,7 @@ class PlayerPage extends StatelessWidget {
                         ],
                       ),
                         ),
+                    ),
                       ],
                     ),
                   ),
@@ -355,3 +468,4 @@ class PlayerPage extends StatelessWidget {
     );
   }
 }
+

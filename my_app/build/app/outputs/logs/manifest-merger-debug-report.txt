@@ -33,6 +33,7 @@ INJECTED from D:\GUSENGA-APP\my_app\android\app\src\debug\AndroidManifest.xml:1:
 MERGED from [:file_picker] D:\GUSENGA-APP\my_app\build\file_picker\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-15:12
 MERGED from [:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-35:12
 MERGED from [:shared_preferences_android] D:\GUSENGA-APP\my_app\build\shared_preferences_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
+MERGED from [:audioplayers_android] D:\GUSENGA-APP\my_app\build\audioplayers_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_plugin_android_lifecycle] D:\GUSENGA-APP\my_app\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider_android] D:\GUSENGA-APP\my_app\build\path_provider_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [:url_launcher_android] D:\GUSENGA-APP\my_app\build\url_launcher_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-14:12
@@ -128,6 +129,8 @@ MERGED from [:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\m
 MERGED from [:share_plus] D:\GUSENGA-APP\my_app\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_android] D:\GUSENGA-APP\my_app\build\shared_preferences_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_android] D:\GUSENGA-APP\my_app\build\shared_preferences_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:audioplayers_android] D:\GUSENGA-APP\my_app\build\audioplayers_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
+MERGED from [:audioplayers_android] D:\GUSENGA-APP\my_app\build\audioplayers_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] D:\GUSENGA-APP\my_app\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:flutter_plugin_android_lifecycle] D:\GUSENGA-APP\my_app\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] D:\GUSENGA-APP\my_app\build\path_provider_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
